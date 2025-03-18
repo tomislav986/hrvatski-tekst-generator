@@ -49,7 +49,6 @@ const Login = () => {
               <path d="M21 14v1"></path>
             </svg>
           </div>
-          <h2 className="text-2xl font-semibold text-gray-800">Dobrodošli natrag</h2>
         </div>
 
         <Card className="border border-gray-200 shadow-sm">
@@ -92,18 +91,10 @@ const Login = () => {
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="flex justify-center pt-0">
-            <p className="text-sm text-gray-500">
-              Zaboravili ste lozinku? <a href="#" className="text-gray-700 hover:underline">Resetirajte</a>
-            </p>
-          </CardFooter>
         </Card>
 
         <div className="text-center">
           <p className="text-lg font-medium text-gray-700">Radni nalozi</p>
-          <p className="mt-2 text-sm text-gray-500">
-            © {new Date().getFullYear()} Sva prava pridržana
-          </p>
         </div>
       </div>
     </div>
