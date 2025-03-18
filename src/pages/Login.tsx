@@ -1,20 +1,22 @@
 
 import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Ovdje bi se trebala implementirati logika za prijavu
-    console.log("Prijava s podacima:", { username, password });
+    console.log("Prijava s podacima:", { username, password, rememberMe });
     // Nakon uspješne prijave, preusmjeriti na početnu stranicu
     navigate("/");
   };
@@ -82,6 +84,19 @@ const Login = () => {
                   required
                   className="bg-gray-50 border-gray-300 focus:border-gray-400 focus:ring-gray-400"
                 />
+              </div>
+              <div className="flex items-center space-x-2 pt-2">
+                <Checkbox 
+                  id="remember" 
+                  checked={rememberMe}
+                  onCheckedChange={(checked) => setRememberMe(checked === true)}
+                />
+                <Label 
+                  htmlFor="remember" 
+                  className="text-sm font-normal cursor-pointer"
+                >
+                  Zapamti podatke za pristup
+                </Label>
               </div>
               <Button 
                 type="submit" 
