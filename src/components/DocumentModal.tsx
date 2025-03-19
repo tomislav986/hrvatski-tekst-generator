@@ -140,20 +140,13 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
         </div>
 
         <div className="flex mt-4 justify-between">
-          <div className="space-x-2">
+          <div>
             <Button 
               onClick={handleAddDocument}
               className="bg-gray-700 hover:bg-gray-800 text-white"
             >
               <Plus className="mr-2 h-4 w-4" />
               Dodaj
-            </Button>
-            <Button 
-              onClick={handleDelete}
-              variant="outline"
-              className="border-gray-300 text-gray-700 hover:bg-gray-100"
-            >
-              <Trash className="mr-2 h-4 w-4" />
             </Button>
           </div>
           <Button 
