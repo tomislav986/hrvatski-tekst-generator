@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, Trash, Save } from "lucide-react";
+import { Camera, Trash, Save, Plus } from "lucide-react";
 
 interface Document {
   id: string;
@@ -133,11 +133,18 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
         <div className="flex mt-4 justify-between">
           <div className="space-x-2">
             <Button 
-              onClick={handleTakePicture}
+              onClick={handleAddDocument}
               className="bg-gray-700 hover:bg-gray-800 text-white"
             >
+              <Plus className="mr-2 h-4 w-4" />
+              Dodaj
+            </Button>
+            <Button 
+              onClick={handleTakePicture}
+              variant="outline"
+              className="border-gray-300 text-gray-700 hover:bg-gray-100"
+            >
               <Camera className="mr-2 h-4 w-4" />
-              Slikaj
             </Button>
             <Button 
               onClick={handleDelete}
@@ -145,7 +152,6 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
               className="border-gray-300 text-gray-700 hover:bg-gray-100"
             >
               <Trash className="mr-2 h-4 w-4" />
-              Obriši
             </Button>
           </div>
           <Button 
@@ -156,14 +162,6 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
             Spremi
           </Button>
         </div>
-
-        <Button
-          variant="ghost"
-          className="mx-auto text-gray-500 hover:text-gray-700 hover:bg-gray-100 mt-2"
-          onClick={handleAddDocument}
-        >
-          + Dodaj novi dokument
-        </Button>
       </DialogContent>
     </Dialog>
   );
