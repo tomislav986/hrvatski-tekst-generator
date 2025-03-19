@@ -85,7 +85,7 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
                 <TableHead className="font-medium text-gray-700">Naziv</TableHead>
                 <TableHead className="font-medium text-gray-700">Opis</TableHead>
                 <TableHead className="font-medium text-gray-700">Napomena</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
+                <TableHead className="w-[100px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -116,13 +116,22 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
                     />
                   </TableCell>
                   <TableCell className="py-2">
-                    <Button
-                      variant="ghost"
-                      className="p-2 h-auto"
-                      onClick={() => handleDeleteDocument(doc.id)}
-                    >
-                      <Trash className="h-4 w-4 text-gray-500" />
-                    </Button>
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="ghost"
+                        className="p-2 h-auto"
+                        onClick={handleTakePicture}
+                      >
+                        <Camera className="h-4 w-4 text-gray-500" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="p-2 h-auto"
+                        onClick={() => handleDeleteDocument(doc.id)}
+                      >
+                        <Trash className="h-4 w-4 text-gray-500" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -138,13 +147,6 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
             >
               <Plus className="mr-2 h-4 w-4" />
               Dodaj
-            </Button>
-            <Button 
-              onClick={handleTakePicture}
-              variant="outline"
-              className="border-gray-300 text-gray-700 hover:bg-gray-100"
-            >
-              <Camera className="mr-2 h-4 w-4" />
             </Button>
             <Button 
               onClick={handleDelete}
