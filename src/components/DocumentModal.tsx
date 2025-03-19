@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, Trash, Save, Plus } from "lucide-react";
+import { Camera, Trash, Save, Plus, FilePlus } from "lucide-react";
 
 interface Document {
   id: string;
@@ -123,6 +123,13 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
                         onClick={handleTakePicture}
                       >
                         <Camera className="h-4 w-4 text-gray-500" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="p-2 h-auto"
+                        onClick={() => console.log("Dodaj dokument za", doc.id)}
+                      >
+                        <FilePlus className="h-4 w-4 text-gray-500" />
                       </Button>
                       <Button
                         variant="ghost"
