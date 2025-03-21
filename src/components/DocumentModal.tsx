@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, Trash, Save, Plus, FilePlus } from "lucide-react";
+import { Camera, Trash, Save, Plus, FilePlus, Eye } from "lucide-react";
 
 interface Document {
   id: string;
@@ -69,6 +69,11 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
   const handleTakePicture = () => {
     console.log("Slikanje dokumenta");
     // Implement camera functionality here
+  };
+
+  const handleViewDocument = (id: string) => {
+    console.log("Pregled dokumenta:", id);
+    // Implement document viewing functionality here
   };
 
   return (
@@ -130,6 +135,13 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
                         onClick={() => console.log("Dodaj dokument za", doc.id)}
                       >
                         <FilePlus className="h-4 w-4 text-gray-500" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="p-2 h-auto"
+                        onClick={() => handleViewDocument(doc.id)}
+                      >
+                        <Eye className="h-4 w-4 text-gray-500" />
                       </Button>
                       <Button
                         variant="ghost"
