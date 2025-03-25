@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,20 +7,18 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import DocumentModal from "@/components/DocumentModal";
-import WorkOrdersDialog from "@/components/WorkOrdersDialog";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
-  const [isWorkOrdersDialogOpen, setIsWorkOrdersDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Open the work orders dialog on submit without checking credentials
-    setIsWorkOrdersDialogOpen(true);
+    // Navigate to the work orders page instead of opening a modal
+    navigate("/work-orders");
   };
 
   return (
@@ -122,11 +121,6 @@ const Login = () => {
       <DocumentModal 
         open={isDocumentModalOpen} 
         onOpenChange={setIsDocumentModalOpen} 
-      />
-
-      <WorkOrdersDialog
-        open={isWorkOrdersDialogOpen}
-        onOpenChange={setIsWorkOrdersDialogOpen}
       />
     </div>
   );
