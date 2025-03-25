@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,7 +18,7 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Show the work orders dialog instead of redirecting
+    // Open the work orders dialog on submit without checking credentials
     setIsWorkOrdersDialogOpen(true);
   };
 
@@ -71,7 +70,6 @@ const Login = () => {
                   placeholder="Unesite korisničko ime"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  required
                   className="bg-gray-50 border-gray-300 focus:border-gray-400 focus:ring-gray-400"
                 />
               </div>
@@ -83,7 +81,6 @@ const Login = () => {
                   placeholder="Unesite lozinku"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required
                   className="bg-gray-50 border-gray-300 focus:border-gray-400 focus:ring-gray-400"
                 />
               </div>
