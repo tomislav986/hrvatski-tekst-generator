@@ -7,20 +7,20 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import DocumentModal from "@/components/DocumentModal";
+import WorkOrdersDialog from "@/components/WorkOrdersDialog";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
+  const [isWorkOrdersDialogOpen, setIsWorkOrdersDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Ovdje bi se trebala implementirati logika za prijavu
-    console.log("Prijava s podacima:", { username, password, rememberMe });
-    // Nakon uspješne prijave, preusmjeriti na početnu stranicu
-    navigate("/");
+    // Show the work orders dialog instead of redirecting
+    setIsWorkOrdersDialogOpen(true);
   };
 
   return (
@@ -125,6 +125,11 @@ const Login = () => {
       <DocumentModal 
         open={isDocumentModalOpen} 
         onOpenChange={setIsDocumentModalOpen} 
+      />
+
+      <WorkOrdersDialog
+        open={isWorkOrdersDialogOpen}
+        onOpenChange={setIsWorkOrdersDialogOpen}
       />
     </div>
   );
