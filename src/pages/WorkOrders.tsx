@@ -13,6 +13,13 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Search, ChevronDown, X, Edit, Download, MoreHorizontal, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 interface WorkOrder {
   id: string;
@@ -87,16 +94,54 @@ const WorkOrders = () => {
     setStatusFilter(null);
   };
 
+  const handleDelete = () => {
+    const selectedOrders = workOrders.filter(order => order.selected);
+    if (selectedOrders.length === 0) {
+      toast("Nema odabranih naloga za brisanje.");
+      return;
+    }
+    
+    // Remove selected work orders
+    setWorkOrders(workOrders.filter(order => !order.selected));
+    toast(`${selectedOrders.length} nalog(a) obrisano.`);
+  };
+
+  const handleComplete = () => {
+    const selectedOrders = workOrders.filter(order => order.selected);
+    if (selectedOrders.length === 0) {
+      toast("Nema odabranih naloga za završavanje.");
+      return;
+    }
+    
+    // Mark selected work orders as completed
+    setWorkOrders(workOrders.map(order => 
+      order.selected ? { ...order, status: "Završeno", selected: false } : order
+    ));
+    toast(`${selectedOrders.length} nalog(a) označeno kao završeno.`);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Toolbar */}
       <div className="flex justify-between p-4 gap-2 border-b">
         <div className="flex gap-2">
           <div className="relative">
-            <Button variant="outline" className="w-32 flex justify-between">
-              Akcija
-              <ChevronDown className="h-4 w-4" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-32 flex justify-between">
+                  Akcija
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white">
+                <DropdownMenuItem onClick={handleDelete}>
+                  Obriši
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleComplete}>
+                  Završi
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           
           <div className="relative">
