@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,7 +35,6 @@ const WorkOrders = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | null>("Status");
   
-  // Mock data for work orders based on the image
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([
     { 
       id: "1", 
@@ -101,7 +99,6 @@ const WorkOrders = () => {
       return;
     }
     
-    // Remove selected work orders
     setWorkOrders(workOrders.filter(order => !order.selected));
     toast(`${selectedOrders.length} nalog(a) obrisano.`);
   };
@@ -113,7 +110,6 @@ const WorkOrders = () => {
       return;
     }
     
-    // Mark selected work orders as completed
     setWorkOrders(workOrders.map(order => 
       order.selected ? { ...order, status: "Završeno", selected: false } : order
     ));
@@ -122,7 +118,6 @@ const WorkOrders = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* Toolbar */}
       <div className="flex justify-between p-4 gap-2 border-b">
         <div className="flex gap-2">
           <div className="relative">
@@ -133,11 +128,11 @@ const WorkOrders = () => {
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-white">
-                <DropdownMenuItem onClick={handleDelete}>
+              <DropdownMenuContent align="start" className="bg-white z-50 shadow-md">
+                <DropdownMenuItem onClick={handleDelete} className="cursor-pointer">
                   Obriši
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleComplete}>
+                <DropdownMenuItem onClick={handleComplete} className="cursor-pointer">
                   Završi
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -176,7 +171,6 @@ const WorkOrders = () => {
         </Button>
       </div>
       
-      {/* Table */}
       <div className="overflow-auto flex-grow">
         <Table>
           <TableHeader className="bg-gray-100">
@@ -257,7 +251,6 @@ const WorkOrders = () => {
         </Table>
       </div>
       
-      {/* Pagination */}
       <div className="border-t p-4 flex justify-between items-center">
         <div>
           Naloga po stranici: 
