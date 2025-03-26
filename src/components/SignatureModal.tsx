@@ -42,10 +42,11 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       canvas.height = 300; // Fixed height
       
       // Reset drawing settings after resize
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 3; // Slightly thicker line
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
       ctx.strokeStyle = "#000000"; // Black color
+      ctx.fillStyle = "#000000"; // Also set fill color for dot drawing
     };
     
     resizeCanvas();
@@ -71,7 +72,8 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     
     // Draw a small dot at the start point
     context.beginPath();
-    context.arc(position.x, position.y, 1, 0, 2 * Math.PI);
+    context.fillStyle = "#000000";
+    context.arc(position.x, position.y, 1.5, 0, 2 * Math.PI);
     context.fill();
     
     // Prevent default behavior to avoid page scrolling/selection
@@ -91,6 +93,8 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     
     // Draw a line from the last position to the current one
     context.beginPath();
+    context.strokeStyle = "#000000"; // Ensure black color for stroke
+    context.lineWidth = 3; // Ensure consistent line width
     context.moveTo(lastPositionRef.current.x, lastPositionRef.current.y);
     context.lineTo(currentPosition.x, currentPosition.y);
     context.stroke();
@@ -146,6 +150,17 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     if (!canvasRef.current) return;
     
     try {
+      // Check if the canvas is empty (all pixels are transparent)
+      const imageData = canvasRef.current.getContext('2d')?.getImageData(
+        0, 0, canvasRef.current.width, canvasRef.current.height
+      );
+      
+      // If no signature was drawn
+      if (!imageData || !hasDrawnContent(imageData)) {
+        toast.error("Molimo nacrtajte potpis prije spremanja");
+        return;
+      }
+      
       // Convert to image data URL
       const dataUrl = canvasRef.current.toDataURL("image/png");
       console.log("Signature saved:", dataUrl.slice(0, 50) + "...");
@@ -157,6 +172,15 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       console.error("Error saving signature:", error);
       toast.error("Greška prilikom spremanja potpisa");
     }
+  };
+  
+  // Helper function to detect if there's actual content drawn on canvas
+  const hasDrawnContent = (imageData: ImageData): boolean => {
+    // Check if any pixel has alpha value > 0 (non-transparent)
+    for (let i = 3; i < imageData.data.length; i += 4) {
+      if (imageData.data[i] > 0) return true;
+    }
+    return false;
   };
 
   return (
