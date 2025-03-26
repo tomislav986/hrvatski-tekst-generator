@@ -43,7 +43,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       canvas.height = 300; // Fixed height
       
       // Reset drawing settings after resize
-      ctx.lineWidth = 4; // Thicker line for better visibility
+      ctx.lineWidth = 5; // Thicker line for better visibility
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
       ctx.strokeStyle = "#000000"; // Black color
@@ -52,10 +52,10 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     
     // Only clear canvas and reset hasContent when modal is opened
     if (open) {
-      console.log("Modal opened, clearing canvas and resetting hasContent");
       resizeCanvas();
-      setHasContent(false);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      setHasContent(false);
+      console.log("Modal opened, canvas cleared, hasContent reset to:", false);
     }
     
     window.addEventListener("resize", resizeCanvas);
@@ -81,10 +81,11 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     // Draw a small dot at the start point
     context.beginPath();
     context.fillStyle = "#000000";
-    context.arc(position.x, position.y, 2, 0, 2 * Math.PI);
+    context.arc(position.x, position.y, 3, 0, 2 * Math.PI);
     context.fill();
     
     setHasContent(true); // Set content flag when user starts drawing
+    console.log("Drawing started, hasContent set to:", true);
     
     // Prevent default behavior to avoid page scrolling/selection
     e.preventDefault();
@@ -104,7 +105,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     // Draw a line from the last position to the current one
     context.beginPath();
     context.strokeStyle = "#000000"; // Ensure black color for stroke
-    context.lineWidth = 4; // Thicker line for better visibility
+    context.lineWidth = 5; // Thicker line for better visibility
     context.moveTo(lastPositionRef.current.x, lastPositionRef.current.y);
     context.lineTo(currentPosition.x, currentPosition.y);
     context.stroke();
@@ -154,6 +155,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     setHasContent(false); // Reset content flag when cleared
+    console.log("Canvas cleared, hasContent reset to:", false);
     toast("Potpis obrisan");
   };
   
@@ -167,6 +169,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       // Check if there is content to save
       if (!hasContent) {
         toast.error("Molimo nacrtajte potpis prije spremanja");
+        console.log("No content to save");
         return;
       }
       
