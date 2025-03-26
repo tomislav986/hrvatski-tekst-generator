@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Save, Trash } from "lucide-react";
@@ -152,6 +153,9 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       <DialogContent className="sm:max-w-[600px] bg-gray-50 border-gray-200 shadow-sm flex flex-col max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="text-xl text-center text-gray-700">Potpis</DialogTitle>
+          <DialogDescription className="text-center text-sm text-gray-500">
+            {isMobile ? "Nacrtajte potpis prstom po ekranu" : "Nacrtajte potpis mišem"}
+          </DialogDescription>
         </DialogHeader>
         
         <div className="flex-grow overflow-hidden p-4">
@@ -168,10 +172,6 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
               onTouchEnd={endDrawing}
             />
           </div>
-          
-          <p className="text-sm text-gray-500 mt-2 text-center">
-            {isMobile ? "Nacrtajte potpis prstom po ekranu" : "Nacrtajte potpis mišem"}
-          </p>
         </div>
 
         <div className="flex justify-between pt-4">
