@@ -39,11 +39,16 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       return;
     }
     
-    // Set canvas dimensions to match container
+    // Set canvas dimensions to match container with proper scaling
     const container = canvas.parentElement;
     if (container) {
-      canvas.width = container.clientWidth;
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width;
       canvas.height = 300;
+      
+      // Important: set actual canvas size to match display size to prevent scaling issues
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = "300px";
     }
     
     // Clear any existing content
@@ -65,14 +70,21 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     
     // Add resize handler
     const handleResize = () => {
-      if (!container) return;
+      if (!container || !ctx) return;
       
       // Save current drawing if any
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       
+      // Get the new container size
+      const rect = container.getBoundingClientRect();
+      
       // Resize canvas
-      canvas.width = container.clientWidth;
+      canvas.width = rect.width;
       canvas.height = 300;
+      
+      // Set display size to match actual size
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = "300px";
       
       // Restore drawing settings
       ctx.lineWidth = 5;
@@ -105,7 +117,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     
     setIsDrawing(true);
     
-    // Get position
+    // Get position with accurate calculation
     const pos = getEventPosition(e, canvas);
     if (!pos) return;
     
@@ -131,7 +143,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     
     if (!ctx) return;
     
-    // Get current position
+    // Get current position with accurate calculation
     const currentPos = getEventPosition(e, canvas);
     if (!currentPos) return;
     
@@ -153,7 +165,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     lastPositionRef.current = null;
   };
   
-  // Helper to get position from mouse or touch event
+  // Helper to get position from mouse or touch event with improved accuracy
   const getEventPosition = (e: React.MouseEvent | React.TouchEvent, canvas: HTMLCanvasElement) => {
     const rect = canvas.getBoundingClientRect();
     
@@ -171,9 +183,14 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       clientY = e.clientY;
     }
     
+    // Calculate position taking into account canvas scaling
+    // This is crucial for accurate drawing position
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
     return {
-      x: clientX - rect.left,
-      y: clientY - rect.top
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
     };
   };
   
