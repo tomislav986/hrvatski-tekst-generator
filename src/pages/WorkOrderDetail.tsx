@@ -340,19 +340,6 @@ const WorkOrderDetail = () => {
                 )}
               </TableRow>
             ))}
-            {[...Array(6)].map((_, i) => (
-              <TableRow key={`empty-${i}`}>
-                {!isMobile && <TableCell></TableCell>}
-                {!isMobile && <TableCell></TableCell>}
-                <TableCell></TableCell>
-                {!isMobile && <TableCell></TableCell>}
-                {!isMobile && <TableCell></TableCell>}
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                {!isMobile && <TableCell></TableCell>}
-                {!isMobile && <TableCell></TableCell>}
-              </TableRow>
-            ))}
           </TableBody>
         </Table>
       </div>
@@ -400,4 +387,3 @@ const WorkOrderDetail = () => {
 };
 
 export default WorkOrderDetail;
-
