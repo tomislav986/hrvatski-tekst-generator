@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Dialog,
@@ -15,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Search, ChevronDown, X, Edit, Download, MoreHorizontal, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Search, ChevronDown, X, Edit, MoreHorizontal, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 interface WorkOrder {
@@ -38,7 +37,6 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | null>("Status");
   
-  // Mock data for work orders based on the image
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([
     { 
       id: "1", 
@@ -100,7 +98,6 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-6xl bg-white p-0 overflow-hidden">
         <div className="flex flex-col h-[80vh]">
-          {/* Toolbar */}
           <div className="flex justify-between p-4 gap-2 border-b">
             <div className="flex gap-2">
               <div className="relative">
@@ -142,7 +139,6 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
             </Button>
           </div>
           
-          {/* Table */}
           <div className="overflow-auto flex-grow">
             <Table>
               <TableHeader className="bg-gray-100">
@@ -196,9 +192,6 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                           <Edit className="h-4 w-4 text-gray-500" />
                         </Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Download className="h-4 w-4 text-gray-500" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
                           <MoreHorizontal className="h-4 w-4 text-gray-500" />
                         </Button>
                       </div>
@@ -223,7 +216,6 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
             </Table>
           </div>
           
-          {/* Pagination */}
           <div className="border-t p-4 flex justify-between items-center">
             <div>
               Naloga po stranici: 

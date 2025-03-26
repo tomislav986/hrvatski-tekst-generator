@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Search, ChevronDown, X, Edit, Download, MoreHorizontal, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Search, ChevronDown, X, Edit, MoreHorizontal, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import {
   DropdownMenu,
@@ -222,9 +222,6 @@ const WorkOrders = () => {
                   <div className="flex space-x-1">
                     <Button variant="ghost" size="icon" className="h-8 w-8">
                       <Edit className="h-4 w-4 text-gray-500" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <Download className="h-4 w-4 text-gray-500" />
                     </Button>
                     <Button variant="ghost" size="icon" className="h-8 w-8">
                       <MoreHorizontal className="h-4 w-4 text-gray-500" />
