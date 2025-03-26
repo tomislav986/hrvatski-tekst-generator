@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -156,11 +157,14 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align={isMobile ? "center" : "start"} className="bg-white z-50 shadow-md">
-                    <DropdownMenuItem onClick={() => handleFilterTypeSelect("Radni nalog")} className="cursor-pointer">
-                      Radni nalog
+                    <DropdownMenuItem onClick={() => handleFilterTypeSelect("410-RN KW")} className="cursor-pointer">
+                      410-RN KW
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterTypeSelect("RN zamjena vodomjera")} className="cursor-pointer">
-                      RN zamjena vodomjera
+                    <DropdownMenuItem onClick={() => handleFilterTypeSelect("440-RN Vozila")} className="cursor-pointer">
+                      440-RN Vozila
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterTypeSelect("475-RN Vodomjeri")} className="cursor-pointer">
+                      475-RN Vodomjeri
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
