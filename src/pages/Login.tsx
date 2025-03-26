@@ -6,18 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
-import DocumentModal from "@/components/DocumentModal";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Navigate to the work orders page instead of opening a modal
+    // Navigate to the work orders page
     navigate("/work-orders");
   };
 
@@ -108,20 +106,8 @@ const Login = () => {
 
         <div className="text-center">
           <p className="text-lg font-medium text-gray-700">Radni nalozi</p>
-          <Button
-            type="button"
-            className="mt-2 bg-gray-700 hover:bg-gray-800"
-            onClick={() => setIsDocumentModalOpen(true)}
-          >
-            Otvori modal za dokumente
-          </Button>
         </div>
       </div>
-
-      <DocumentModal 
-        open={isDocumentModalOpen} 
-        onOpenChange={setIsDocumentModalOpen} 
-      />
     </div>
   );
 };

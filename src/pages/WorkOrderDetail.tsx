@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
+import DocumentModal from "@/components/DocumentModal";
 
 interface WorkOrderItem {
   id: number;
@@ -31,6 +31,7 @@ const WorkOrderDetail = () => {
   const location = useLocation();
   const { orderType } = (location.state as LocationState) || {};
   const isMobile = useIsMobile();
+  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   
   const [formData, setFormData] = useState({
     nalog: "IN/1001/23",
@@ -44,7 +45,6 @@ const WorkOrderDetail = () => {
     vrsta: orderType || ""
   });
 
-  // Check if this is a water meter work order
   const isWaterMeterOrder = formData.vrsta === "475-RN Vodomjeri";
 
   const [items, setItems] = useState<WorkOrderItem[]>([
@@ -95,11 +95,9 @@ const WorkOrderDetail = () => {
   ]);
 
   useEffect(() => {
-    // This would be where you'd fetch the order details from an API
     console.log("Loading work order details for ID:", id);
     console.log("Order type:", orderType);
     
-    // Set specific types for different work orders
     if (id === "1") {
       setFormData(prev => ({
         ...prev,
@@ -127,7 +125,6 @@ const WorkOrderDetail = () => {
         kontakt: "098 111 22 33, tom@hh.hr"
       }));
     } 
-    // For other work orders, use the orderType if provided
     else if (orderType) {
       setFormData(prev => ({
         ...prev,
@@ -158,7 +155,7 @@ const WorkOrderDetail = () => {
   };
 
   const handleDocuments = () => {
-    toast("Otvaranje dokumenata...");
+    setIsDocumentModalOpen(true);
   };
 
   const handleSignatures = () => {
@@ -393,8 +390,14 @@ const WorkOrderDetail = () => {
           Potpisi
         </Button>
       </div>
+
+      <DocumentModal 
+        open={isDocumentModalOpen} 
+        onOpenChange={setIsDocumentModalOpen} 
+      />
     </div>
   );
 };
 
 export default WorkOrderDetail;
+
