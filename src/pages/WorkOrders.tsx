@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useIsMobile, useIsSmallMobile } from "@/hooks/use-mobile";
+import WorkOrderModal, { WorkOrder } from "@/components/WorkOrderModal";
 
 interface WorkOrder {
   id: string;
@@ -41,6 +42,7 @@ const WorkOrders = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | null>("Status");
   const [filterType, setFilterType] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([
     { 
@@ -140,6 +142,10 @@ const WorkOrders = () => {
     navigate(`/work-orders/${id}`);
   };
 
+  const handleAddWorkOrder = (newWorkOrder: WorkOrder) => {
+    setWorkOrders([newWorkOrder, ...workOrders]);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} justify-between p-2 sm:p-4 gap-2 border-b`}>
@@ -214,7 +220,11 @@ const WorkOrders = () => {
           )}
         </div>
         
-        <Button variant="default" className="mt-2 sm:mt-0 bg-gray-800 hover:bg-gray-700">
+        <Button 
+          variant="default" 
+          className="mt-2 sm:mt-0 bg-gray-800 hover:bg-gray-700"
+          onClick={() => setIsModalOpen(true)}
+        >
           Unos
         </Button>
       </div>
@@ -252,7 +262,7 @@ const WorkOrders = () => {
                     <Checkbox 
                       checked={order.selected} 
                       onCheckedChange={(checked) => 
-                        handleSelectChange(order.id, checked === true)
+                        handleSelectChange(order.id!, checked === true)
                       }
                     />
                   </TableCell>
@@ -283,7 +293,7 @@ const WorkOrders = () => {
                         variant="ghost" 
                         size="icon" 
                         className="h-8 w-8"
-                        onClick={() => handleEditOrder(order.id)}
+                        onClick={() => handleEditOrder(order.id!)}
                       >
                         <Edit className="h-4 w-4 text-gray-500" />
                       </Button>
@@ -305,7 +315,7 @@ const WorkOrders = () => {
         </div>
         
         <div className="text-sm text-gray-500 mb-2 sm:mb-0">
-          1 - 4 of 4
+          1 - {workOrders.length} of {workOrders.length}
         </div>
         
         <Pagination>
@@ -329,6 +339,12 @@ const WorkOrders = () => {
           </PaginationContent>
         </Pagination>
       </div>
+
+      <WorkOrderModal 
+        open={isModalOpen} 
+        onOpenChange={setIsModalOpen} 
+        onAddWorkOrder={handleAddWorkOrder} 
+      />
     </div>
   );
 };
