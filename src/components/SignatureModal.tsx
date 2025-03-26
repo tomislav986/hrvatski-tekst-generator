@@ -51,6 +51,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     };
     
     window.addEventListener("resize", resizeCanvas);
+    resizeCanvas(); // Call immediately to set initial size
     setContext(ctx);
     
     return () => {
@@ -61,7 +62,6 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
   // Reset canvas when modal opens
   useEffect(() => {
     if (open && canvasRef.current && context) {
-      // Only reset when opening the modal
       console.log("Modal opened, resetting canvas");
       
       // Make sure canvas is properly sized
@@ -71,7 +71,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
         canvasRef.current.height = 300;
       }
       
-      // Clear canvas and reset drawing
+      // Clear canvas
       context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       
       // Reset drawing settings
@@ -86,7 +86,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       setIsDrawing(false);
       lastPositionRef.current = null;
       
-      console.log("Canvas cleared, hasContent reset to:", false);
+      console.log("Canvas reset complete, hasContent:", false);
     }
   }, [open, context]);
 
