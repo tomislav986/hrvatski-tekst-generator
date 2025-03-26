@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Check, X } from "lucide-react";
+import { Check, X, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import DocumentModal from "@/components/DocumentModal";
@@ -146,6 +146,18 @@ const WorkOrderDetail = () => {
     
     toast("Nova stavka dodana", {
       description: "Stavka je uspješno dodana na radni nalog"
+    });
+  };
+
+  const handleDeleteItem = (idToDelete: number | undefined) => {
+    if (idToDelete === undefined) return;
+    
+    // Filter out the item with the matching ID
+    const updatedItems = items.filter(item => item.id !== idToDelete);
+    setItems(updatedItems);
+    
+    toast("Stavka izbrisana", {
+      description: "Stavka je uspješno izbrisana iz radnog naloga"
     });
   };
 
@@ -298,6 +310,7 @@ const WorkOrderDetail = () => {
               <TableHead>{isMobile ? "Izvr." : "Izvršena količina"}</TableHead>
               {!isMobile && <TableHead>Status</TableHead>}
               {!isMobile && <TableHead>Amount</TableHead>}
+              <TableHead className="w-10"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -343,6 +356,17 @@ const WorkOrderDetail = () => {
                     )}
                   </TableCell>
                 )}
+                <TableCell className="p-2">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => handleDeleteItem(item.id)}
+                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <Trash className="h-4 w-4" />
+                    <span className="sr-only">Izbriši stavku</span>
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
