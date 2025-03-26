@@ -1,5 +1,5 @@
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +22,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  const lastPositionRef = useRef<{ x: number; y: number } | null>(null);
 
   // Initialize canvas
   useEffect(() => {
@@ -44,7 +45,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       ctx.lineWidth = 2;
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
-      ctx.strokeStyle = "#000000"; // Ensure black color
+      ctx.strokeStyle = "#000000"; // Black color
     };
     
     resizeCanvas();
@@ -56,44 +57,54 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     };
   }, [open]);
 
-  // Drawing functions
-  const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
+  // Start drawing function
+  const startDrawing = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (!context || !canvasRef.current) return;
     
     setIsDrawing(true);
-    context.beginPath();
     
     // Get the position
     const position = getEventPosition(e);
     if (!position) return;
     
-    context.moveTo(position.x, position.y);
+    lastPositionRef.current = position;
+    
+    // Draw a small dot at the start point
+    context.beginPath();
+    context.arc(position.x, position.y, 1, 0, 2 * Math.PI);
+    context.fill();
     
     // Prevent default behavior to avoid page scrolling/selection
     e.preventDefault();
-  };
+  }, [context]);
   
-  const draw = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDrawing || !context || !canvasRef.current) return;
+  // Drawing function
+  const draw = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDrawing || !context || !canvasRef.current || !lastPositionRef.current) return;
     
     // Prevent default behavior
     e.preventDefault();
     
-    // Get the position
-    const position = getEventPosition(e);
-    if (!position) return;
+    // Get the current position
+    const currentPosition = getEventPosition(e);
+    if (!currentPosition) return;
     
-    context.lineTo(position.x, position.y);
+    // Draw a line from the last position to the current one
+    context.beginPath();
+    context.moveTo(lastPositionRef.current.x, lastPositionRef.current.y);
+    context.lineTo(currentPosition.x, currentPosition.y);
     context.stroke();
-  };
-  
-  const endDrawing = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!context) return;
     
-    e.preventDefault();
+    // Update the last position
+    lastPositionRef.current = currentPosition;
+  }, [isDrawing, context]);
+  
+  // End drawing function
+  const endDrawing = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     setIsDrawing(false);
-    context.closePath();
-  };
+    lastPositionRef.current = null;
+    e.preventDefault();
+  }, []);
   
   // Get position for both mouse and touch events
   const getEventPosition = (e: React.MouseEvent | React.TouchEvent) => {
