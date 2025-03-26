@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -269,25 +268,6 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                           )}
                         </div>
                       </TableCell>
-                    </TableRow>
-                  ))}
-                  {[...Array(6)].map((_, i) => (
-                    <TableRow key={`empty-${i}`}>
-                      <TableCell>
-                        <Checkbox />
-                      </TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      {!isMobile && (
-                        <>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                        </>
-                      )}
-                      <TableCell></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

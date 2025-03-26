@@ -291,25 +291,6 @@ const WorkOrders = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              {[...Array(6)].map((_, i) => (
-                <TableRow key={`empty-${i}`}>
-                  <TableCell>
-                    <Checkbox />
-                  </TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  {!isMobile && (
-                    <>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                    </>
-                  )}
-                  <TableCell></TableCell>
-                </TableRow>
-              ))}
             </TableBody>
           </Table>
         </div>
@@ -353,4 +334,3 @@ const WorkOrders = () => {
 };
 
 export default WorkOrders;
-
