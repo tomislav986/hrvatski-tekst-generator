@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {
   Dialog,
@@ -16,6 +17,12 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Search, ChevronDown, X, Edit, MoreHorizontal, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface WorkOrder {
   id: string;
@@ -36,6 +43,7 @@ interface WorkOrdersDialogProps {
 const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | null>("Status");
+  const [filterType, setFilterType] = useState<string | null>(null);
   
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([
     { 
@@ -94,6 +102,14 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     setStatusFilter(null);
   };
 
+  const handleRemoveFilterType = () => {
+    setFilterType(null);
+  };
+
+  const handleFilterTypeSelect = (type: string) => {
+    setFilterType(type);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-6xl bg-white p-0 overflow-hidden">
@@ -118,16 +134,37 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
               </div>
               
               <div className="relative">
-                <Button variant="outline" className="flex justify-between">
-                  Filtriranje
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="flex justify-between">
+                      Filtriranje
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="bg-white z-50 shadow-md">
+                    <DropdownMenuItem onClick={() => handleFilterTypeSelect("Radni nalog")} className="cursor-pointer">
+                      Radni nalog
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterTypeSelect("RN zamjena vodomjera")} className="cursor-pointer">
+                      RN zamjena vodomjera
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
               
               {statusFilter && (
                 <div className="flex items-center bg-gray-200 rounded-md px-3 py-1">
                   <span className="text-sm mr-2">{statusFilter}</span>
                   <button onClick={handleRemoveStatusFilter}>
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
+              
+              {filterType && (
+                <div className="flex items-center bg-gray-200 rounded-md px-3 py-1">
+                  <span className="text-sm mr-2">{filterType}</span>
+                  <button onClick={handleRemoveFilterType}>
                     <X className="h-4 w-4" />
                   </button>
                 </div>

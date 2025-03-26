@@ -34,6 +34,7 @@ interface WorkOrder {
 const WorkOrders = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | null>("Status");
+  const [filterType, setFilterType] = useState<string | null>(null);
   
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([
     { 
@@ -90,6 +91,15 @@ const WorkOrders = () => {
 
   const handleRemoveStatusFilter = () => {
     setStatusFilter(null);
+  };
+
+  const handleRemoveFilterType = () => {
+    setFilterType(null);
+  };
+
+  const handleFilterTypeSelect = (type: string) => {
+    setFilterType(type);
+    toast(`Filter postavljen: ${type}`);
   };
 
   const handleDelete = () => {
@@ -150,16 +160,37 @@ const WorkOrders = () => {
           </div>
           
           <div className="relative">
-            <Button variant="outline" className="flex justify-between">
-              Filtriranje
-              <ChevronDown className="h-4 w-4" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="flex justify-between">
+                  Filtriranje
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="bg-white z-50 shadow-md">
+                <DropdownMenuItem onClick={() => handleFilterTypeSelect("Radni nalog")} className="cursor-pointer">
+                  Radni nalog
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleFilterTypeSelect("RN zamjena vodomjera")} className="cursor-pointer">
+                  RN zamjena vodomjera
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           
           {statusFilter && (
             <div className="flex items-center bg-gray-200 rounded-md px-3 py-1">
               <span className="text-sm mr-2">{statusFilter}</span>
               <button onClick={handleRemoveStatusFilter}>
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+          
+          {filterType && (
+            <div className="flex items-center bg-gray-200 rounded-md px-3 py-1">
+              <span className="text-sm mr-2">{filterType}</span>
+              <button onClick={handleRemoveFilterType}>
                 <X className="h-4 w-4" />
               </button>
             </div>
