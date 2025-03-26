@@ -50,21 +50,45 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       ctx.fillStyle = "#000000"; // Black color for dot drawing
     };
     
-    // Only clear canvas and reset hasContent when modal is opened
-    if (open) {
-      resizeCanvas();
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      setHasContent(false);
-      console.log("Modal opened, canvas cleared, hasContent reset to:", false);
-    }
-    
     window.addEventListener("resize", resizeCanvas);
     setContext(ctx);
     
     return () => {
       window.removeEventListener("resize", resizeCanvas);
     };
-  }, [open]);
+  }, []);
+
+  // Reset canvas when modal opens
+  useEffect(() => {
+    if (open && canvasRef.current && context) {
+      // Only reset when opening the modal
+      console.log("Modal opened, resetting canvas");
+      
+      // Make sure canvas is properly sized
+      const container = canvasRef.current.parentElement;
+      if (container) {
+        canvasRef.current.width = container.clientWidth;
+        canvasRef.current.height = 300;
+      }
+      
+      // Clear canvas and reset drawing
+      context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      
+      // Reset drawing settings
+      context.lineWidth = 5;
+      context.lineJoin = "round";
+      context.lineCap = "round";
+      context.strokeStyle = "#000000";
+      context.fillStyle = "#000000";
+      
+      // Reset state
+      setHasContent(false);
+      setIsDrawing(false);
+      lastPositionRef.current = null;
+      
+      console.log("Canvas cleared, hasContent reset to:", false);
+    }
+  }, [open, context]);
 
   // Start drawing function
   const startDrawing = useCallback((e: React.MouseEvent | React.TouchEvent) => {
