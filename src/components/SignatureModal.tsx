@@ -52,6 +52,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     
     resizeCanvas();
     setHasContent(false); // Reset content flag when reopening
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas when reopening
     window.addEventListener("resize", resizeCanvas);
     setContext(ctx);
     
@@ -65,7 +66,6 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     if (!context || !canvasRef.current) return;
     
     setIsDrawing(true);
-    setHasContent(true); // Set content flag on first drawing action
     
     // Get the position
     const position = getEventPosition(e);
@@ -78,6 +78,8 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     context.fillStyle = "#000000";
     context.arc(position.x, position.y, 2, 0, 2 * Math.PI);
     context.fill();
+    
+    setHasContent(true); // Set content flag when user starts drawing
     
     // Prevent default behavior to avoid page scrolling/selection
     e.preventDefault();
@@ -155,7 +157,9 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     if (!canvasRef.current) return;
     
     try {
-      // Use our hasContent state instead of pixel checking
+      console.log("Checking signature content. Has content:", hasContent);
+      
+      // Check if there is content to save
       if (!hasContent) {
         toast.error("Molimo nacrtajte potpis prije spremanja");
         return;
@@ -164,7 +168,6 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       // Convert to image data URL
       const dataUrl = canvasRef.current.toDataURL("image/png");
       console.log("Signature saved:", dataUrl.substring(0, 50) + "...");
-      console.log("Has content:", hasContent);
       
       // Here you could store the dataUrl to state, context, or send to server
       toast.success("Potpis spremljen");
