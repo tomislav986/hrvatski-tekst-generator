@@ -97,8 +97,26 @@ const WorkOrderDetail = () => {
     console.log("Loading work order details for ID:", id);
     console.log("Order type:", orderType);
     
-    // For work order with ID 3, set the vrsta to "475-RN Vodomjeri"
-    if (id === "3") {
+    // Set specific types for different work orders
+    if (id === "1") {
+      setFormData(prev => ({
+        ...prev,
+        vrsta: "410-RN KW",
+        nalog: "IN/1001/23",
+        korisnik: "Marko Marković, Tina Ujevića 25",
+        kontakt: "099 123 45 67"
+      }));
+    } 
+    else if (id === "2") {
+      setFormData(prev => ({
+        ...prev,
+        vrsta: "440-RN Vozila",
+        nalog: "IN/1002/23",
+        korisnik: "Tim d.o.o., Zavojna 2b",
+        kontakt: "098 321 54 98"
+      }));
+    }
+    else if (id === "3") {
       setFormData(prev => ({
         ...prev,
         vrsta: "475-RN Vodomjeri",
