@@ -97,8 +97,18 @@ const WorkOrderDetail = () => {
     console.log("Loading work order details for ID:", id);
     console.log("Order type:", orderType);
     
-    // For now we'll just use the mock data and update the type if it's provided
-    if (orderType) {
+    // For work order with ID 3, set the vrsta to "475-RN Vodomjeri"
+    if (id === "3") {
+      setFormData(prev => ({
+        ...prev,
+        vrsta: "475-RN Vodomjeri",
+        nalog: "IN/1003/23",
+        korisnik: "Tomislav Horvat, Uska 46",
+        kontakt: "098 111 22 33, tom@hh.hr"
+      }));
+    } 
+    // For other work orders, use the orderType if provided
+    else if (orderType) {
       setFormData(prev => ({
         ...prev,
         vrsta: orderType
