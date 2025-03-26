@@ -25,7 +25,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
   const lastPositionRef = useRef<{ x: number; y: number } | null>(null);
   const [hasContent, setHasContent] = useState(false);
 
-  // Initialize canvas
+  // Initialize canvas context only once
   useEffect(() => {
     if (!canvasRef.current) return;
     
@@ -33,6 +33,8 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     const ctx = canvas.getContext("2d");
     
     if (!ctx) return;
+    
+    setContext(ctx);
     
     // Set canvas dimensions to match container
     const resizeCanvas = () => {
@@ -52,34 +54,44 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas(); // Call immediately to set initial size
-    setContext(ctx);
     
     return () => {
       window.removeEventListener("resize", resizeCanvas);
     };
   }, []);
 
-  // Reset canvas when modal opens
+  // Reset canvas when modal opens - this is critical for ensuring drawing works each time
   useEffect(() => {
-    if (open && canvasRef.current && context) {
-      console.log("Modal opened, resetting canvas");
+    if (!canvasRef.current) return;
+    
+    // Get the canvas element and ensure it has a context
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    
+    // Only reset when the modal is open
+    if (open) {
+      console.log("Modal opened, resetting canvas and context");
       
-      // Make sure canvas is properly sized
-      const container = canvasRef.current.parentElement;
+      // Resize the canvas to fit the container
+      const container = canvas.parentElement;
       if (container) {
-        canvasRef.current.width = container.clientWidth;
-        canvasRef.current.height = 300;
+        canvas.width = container.clientWidth;
+        canvas.height = 300;
       }
       
-      // Clear canvas
-      context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      // Clear any existing content
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Reset drawing settings
-      context.lineWidth = 5;
-      context.lineJoin = "round";
-      context.lineCap = "round";
-      context.strokeStyle = "#000000";
-      context.fillStyle = "#000000";
+      // Reset the drawing settings
+      ctx.lineWidth = 5;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#000000";
+      ctx.fillStyle = "#000000";
+      
+      // Make sure the context is set
+      setContext(ctx);
       
       // Reset state
       setHasContent(false);
@@ -88,7 +100,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       
       console.log("Canvas reset complete, hasContent:", false);
     }
-  }, [open, context]);
+  }, [open]);
 
   // Start drawing function
   const startDrawing = useCallback((e: React.MouseEvent | React.TouchEvent) => {
