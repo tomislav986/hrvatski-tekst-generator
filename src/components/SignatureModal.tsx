@@ -23,6 +23,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const lastPositionRef = useRef<{ x: number; y: number } | null>(null);
+  const [hasContent, setHasContent] = useState(false);
 
   // Initialize canvas
   useEffect(() => {
@@ -42,14 +43,15 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       canvas.height = 300; // Fixed height
       
       // Reset drawing settings after resize
-      ctx.lineWidth = 3; // Slightly thicker line
+      ctx.lineWidth = 4; // Thicker line for better visibility
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
       ctx.strokeStyle = "#000000"; // Black color
-      ctx.fillStyle = "#000000"; // Also set fill color for dot drawing
+      ctx.fillStyle = "#000000"; // Black color for dot drawing
     };
     
     resizeCanvas();
+    setHasContent(false); // Reset content flag when reopening
     window.addEventListener("resize", resizeCanvas);
     setContext(ctx);
     
@@ -63,6 +65,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     if (!context || !canvasRef.current) return;
     
     setIsDrawing(true);
+    setHasContent(true); // Set content flag on first drawing action
     
     // Get the position
     const position = getEventPosition(e);
@@ -73,7 +76,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     // Draw a small dot at the start point
     context.beginPath();
     context.fillStyle = "#000000";
-    context.arc(position.x, position.y, 1.5, 0, 2 * Math.PI);
+    context.arc(position.x, position.y, 2, 0, 2 * Math.PI);
     context.fill();
     
     // Prevent default behavior to avoid page scrolling/selection
@@ -94,13 +97,14 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     // Draw a line from the last position to the current one
     context.beginPath();
     context.strokeStyle = "#000000"; // Ensure black color for stroke
-    context.lineWidth = 3; // Ensure consistent line width
+    context.lineWidth = 4; // Thicker line for better visibility
     context.moveTo(lastPositionRef.current.x, lastPositionRef.current.y);
     context.lineTo(currentPosition.x, currentPosition.y);
     context.stroke();
     
     // Update the last position
     lastPositionRef.current = currentPosition;
+    setHasContent(true); // Ensure content flag is set during drawing
   }, [isDrawing, context]);
   
   // End drawing function
@@ -142,6 +146,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     if (!canvasRef.current || !context) return;
     
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    setHasContent(false); // Reset content flag when cleared
     toast("Potpis obrisan");
   };
   
@@ -150,20 +155,16 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     if (!canvasRef.current) return;
     
     try {
-      // Check if the canvas is empty (all pixels are transparent)
-      const imageData = canvasRef.current.getContext('2d')?.getImageData(
-        0, 0, canvasRef.current.width, canvasRef.current.height
-      );
-      
-      // If no signature was drawn
-      if (!imageData || !hasDrawnContent(imageData)) {
+      // Use our hasContent state instead of pixel checking
+      if (!hasContent) {
         toast.error("Molimo nacrtajte potpis prije spremanja");
         return;
       }
       
       // Convert to image data URL
       const dataUrl = canvasRef.current.toDataURL("image/png");
-      console.log("Signature saved:", dataUrl.slice(0, 50) + "...");
+      console.log("Signature saved:", dataUrl.substring(0, 50) + "...");
+      console.log("Has content:", hasContent);
       
       // Here you could store the dataUrl to state, context, or send to server
       toast.success("Potpis spremljen");
@@ -172,15 +173,6 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       console.error("Error saving signature:", error);
       toast.error("Greška prilikom spremanja potpisa");
     }
-  };
-  
-  // Helper function to detect if there's actual content drawn on canvas
-  const hasDrawnContent = (imageData: ImageData): boolean => {
-    // Check if any pixel has alpha value > 0 (non-transparent)
-    for (let i = 3; i < imageData.data.length; i += 4) {
-      if (imageData.data[i] > 0) return true;
-    }
-    return false;
   };
 
   return (
