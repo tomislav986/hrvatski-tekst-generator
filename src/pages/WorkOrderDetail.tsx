@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,18 +10,8 @@ import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import DocumentModal from "@/components/DocumentModal";
 import SignatureModal from "@/components/SignatureModal";
-
-interface WorkOrderItem {
-  id: number;
-  sifra: string;
-  naziv: string;
-  jmj: string;
-  djelatnik: string;
-  kolicina_plan: string | number;
-  izvrsena_kolicina: string | number;
-  status: string;
-  amount: string;
-}
+import NewItemModal from "@/components/NewItemModal";
+import { WorkOrderItem } from "@/components/NewItemModal";
 
 interface LocationState {
   orderType?: string;
@@ -34,6 +25,7 @@ const WorkOrderDetail = () => {
   const isMobile = useIsMobile();
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
+  const [isNewItemModalOpen, setIsNewItemModalOpen] = useState(false);
   
   const [formData, setFormData] = useState({
     nalog: "IN/1001/23",
@@ -141,6 +133,17 @@ const WorkOrderDetail = () => {
   };
 
   const handleAddNewItem = () => {
+    setIsNewItemModalOpen(true);
+  };
+
+  const addNewItem = (newItem: WorkOrderItem) => {
+    // Generate a new ID for the item
+    const newId = Math.max(0, ...items.map(item => Number(item.id) || 0)) + 1;
+    const itemWithId = { ...newItem, id: newId };
+    
+    // Add the new item to the list
+    setItems([...items, itemWithId]);
+    
     toast("Nova stavka dodana", {
       description: "Stavka je uspješno dodana na radni nalog"
     });
@@ -388,6 +391,12 @@ const WorkOrderDetail = () => {
       <SignatureModal 
         open={isSignatureModalOpen} 
         onOpenChange={setIsSignatureModalOpen} 
+      />
+      
+      <NewItemModal
+        open={isNewItemModalOpen}
+        onOpenChange={setIsNewItemModalOpen}
+        onAddItem={addNewItem}
       />
     </div>
   );
