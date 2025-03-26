@@ -8,6 +8,7 @@ import { Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import DocumentModal from "@/components/DocumentModal";
+import SignatureModal from "@/components/SignatureModal";
 
 interface WorkOrderItem {
   id: number;
@@ -32,6 +33,7 @@ const WorkOrderDetail = () => {
   const { orderType } = (location.state as LocationState) || {};
   const isMobile = useIsMobile();
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
+  const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
   
   const [formData, setFormData] = useState({
     nalog: "IN/1001/23",
@@ -159,7 +161,7 @@ const WorkOrderDetail = () => {
   };
 
   const handleSignatures = () => {
-    toast("Otvaranje potpisa...");
+    setIsSignatureModalOpen(true);
   };
 
   return (
@@ -381,6 +383,11 @@ const WorkOrderDetail = () => {
       <DocumentModal 
         open={isDocumentModalOpen} 
         onOpenChange={setIsDocumentModalOpen} 
+      />
+      
+      <SignatureModal 
+        open={isSignatureModalOpen} 
+        onOpenChange={setIsSignatureModalOpen} 
       />
     </div>
   );
