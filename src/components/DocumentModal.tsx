@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Camera, Trash, Save, Plus, FilePlus, Eye } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Document {
   id: string;
@@ -32,6 +33,7 @@ interface DocumentModalProps {
 }
 
 const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
+  const isMobile = useIsMobile();
   const [documents, setDocuments] = useState<Document[]>([
     { id: "1", naziv: "", opis: "", napomena: "" },
   ]);
@@ -83,80 +85,160 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
           <DialogTitle className="text-xl text-center text-gray-700">Unos dokumenata</DialogTitle>
         </DialogHeader>
         
-        <div className="overflow-x-auto">
-          <Table className="border border-gray-200">
-            <TableHeader className="bg-gray-100">
-              <TableRow>
-                <TableHead className="font-medium text-gray-700">Naziv</TableHead>
-                <TableHead className="font-medium text-gray-700">Opis</TableHead>
-                <TableHead className="font-medium text-gray-700">Napomena</TableHead>
-                <TableHead className="w-[100px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {documents.map((doc) => (
-                <TableRow key={doc.id} className="border-t border-gray-200">
-                  <TableCell className="py-2">
+        {isMobile ? (
+          // Mobile layout - vertical
+          <div className="space-y-4">
+            {documents.map((doc) => (
+              <div key={doc.id} className="border border-gray-200 rounded-md p-3 bg-white">
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-700">Naziv</label>
                     <Input
                       value={doc.naziv}
                       onChange={(e) => handleInputChange(doc.id, "naziv", e.target.value)}
                       className="bg-gray-50 border-gray-300 focus:border-gray-400 focus:ring-gray-400"
                       placeholder="Unesite naziv"
                     />
-                  </TableCell>
-                  <TableCell className="py-2">
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-700">Opis</label>
                     <Input
                       value={doc.opis}
                       onChange={(e) => handleInputChange(doc.id, "opis", e.target.value)}
                       className="bg-gray-50 border-gray-300 focus:border-gray-400 focus:ring-gray-400"
                       placeholder="Unesite opis"
                     />
-                  </TableCell>
-                  <TableCell className="py-2">
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-700">Napomena</label>
                     <Textarea
                       value={doc.napomena}
                       onChange={(e) => handleInputChange(doc.id, "napomena", e.target.value)}
                       className="bg-gray-50 border-gray-300 focus:border-gray-400 focus:ring-gray-400 min-h-[60px]"
                       placeholder="Unesite napomenu"
                     />
-                  </TableCell>
-                  <TableCell className="py-2">
-                    <div className="flex space-x-1">
-                      <Button
-                        variant="ghost"
-                        className="p-2 h-auto"
-                        onClick={handleTakePicture}
-                      >
-                        <Camera className="h-4 w-4 text-gray-500" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        className="p-2 h-auto"
-                        onClick={() => console.log("Dodaj dokument za", doc.id)}
-                      >
-                        <FilePlus className="h-4 w-4 text-gray-500" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        className="p-2 h-auto"
-                        onClick={() => handleViewDocument(doc.id)}
-                      >
-                        <Eye className="h-4 w-4 text-gray-500" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        className="p-2 h-auto"
-                        onClick={() => handleDeleteDocument(doc.id)}
-                      >
-                        <Trash className="h-4 w-4 text-gray-500" />
-                      </Button>
-                    </div>
-                  </TableCell>
+                  </div>
+                  
+                  <div className="flex flex-col space-y-2 pt-2">
+                    <Button
+                      variant="ghost"
+                      className="justify-start"
+                      onClick={handleTakePicture}
+                    >
+                      <Camera className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-gray-600">Slikaj</span>
+                    </Button>
+                    
+                    <Button
+                      variant="ghost"
+                      className="justify-start"
+                      onClick={() => console.log("Dodaj dokument za", doc.id)}
+                    >
+                      <FilePlus className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-gray-600">Dodaj dokument</span>
+                    </Button>
+                    
+                    <Button
+                      variant="ghost"
+                      className="justify-start"
+                      onClick={() => handleViewDocument(doc.id)}
+                    >
+                      <Eye className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-gray-600">Pregledaj</span>
+                    </Button>
+                    
+                    <Button
+                      variant="ghost"
+                      className="justify-start"
+                      onClick={() => handleDeleteDocument(doc.id)}
+                    >
+                      <Trash className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-gray-600">Obriši</span>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          // Desktop layout - horizontal table
+          <div className="overflow-x-auto">
+            <Table className="border border-gray-200">
+              <TableHeader className="bg-gray-100">
+                <TableRow>
+                  <TableHead className="font-medium text-gray-700">Naziv</TableHead>
+                  <TableHead className="font-medium text-gray-700">Opis</TableHead>
+                  <TableHead className="font-medium text-gray-700">Napomena</TableHead>
+                  <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {documents.map((doc) => (
+                  <TableRow key={doc.id} className="border-t border-gray-200">
+                    <TableCell className="py-2">
+                      <Input
+                        value={doc.naziv}
+                        onChange={(e) => handleInputChange(doc.id, "naziv", e.target.value)}
+                        className="bg-gray-50 border-gray-300 focus:border-gray-400 focus:ring-gray-400"
+                        placeholder="Unesite naziv"
+                      />
+                    </TableCell>
+                    <TableCell className="py-2">
+                      <Input
+                        value={doc.opis}
+                        onChange={(e) => handleInputChange(doc.id, "opis", e.target.value)}
+                        className="bg-gray-50 border-gray-300 focus:border-gray-400 focus:ring-gray-400"
+                        placeholder="Unesite opis"
+                      />
+                    </TableCell>
+                    <TableCell className="py-2">
+                      <Textarea
+                        value={doc.napomena}
+                        onChange={(e) => handleInputChange(doc.id, "napomena", e.target.value)}
+                        className="bg-gray-50 border-gray-300 focus:border-gray-400 focus:ring-gray-400 min-h-[60px]"
+                        placeholder="Unesite napomenu"
+                      />
+                    </TableCell>
+                    <TableCell className="py-2">
+                      <div className="flex space-x-1">
+                        <Button
+                          variant="ghost"
+                          className="p-2 h-auto"
+                          onClick={handleTakePicture}
+                        >
+                          <Camera className="h-4 w-4 text-gray-500" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className="p-2 h-auto"
+                          onClick={() => console.log("Dodaj dokument za", doc.id)}
+                        >
+                          <FilePlus className="h-4 w-4 text-gray-500" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className="p-2 h-auto"
+                          onClick={() => handleViewDocument(doc.id)}
+                        >
+                          <Eye className="h-4 w-4 text-gray-500" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className="p-2 h-auto"
+                          onClick={() => handleDeleteDocument(doc.id)}
+                        >
+                          <Trash className="h-4 w-4 text-gray-500" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
 
         <div className="flex mt-4 justify-between">
           <div>
