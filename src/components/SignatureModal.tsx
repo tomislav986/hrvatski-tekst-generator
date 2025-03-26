@@ -43,7 +43,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       ctx.lineWidth = 2;
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
-      ctx.strokeStyle = "#000";
+      ctx.strokeStyle = "#000000"; // Ensure black color
     };
     
     resizeCanvas();
@@ -57,7 +57,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
 
   // Drawing functions
   const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!context) return;
+    if (!context || !canvasRef.current) return;
     
     setIsDrawing(true);
     context.beginPath();
@@ -67,10 +67,16 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     if (!position) return;
     
     context.moveTo(position.x, position.y);
+    
+    // Prevent default behavior to avoid page scrolling/selection
+    e.preventDefault();
   };
   
   const draw = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDrawing || !context) return;
+    if (!isDrawing || !context || !canvasRef.current) return;
+    
+    // Prevent default behavior
+    e.preventDefault();
     
     // Get the position
     const position = getEventPosition(e);
@@ -80,9 +86,10 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     context.stroke();
   };
   
-  const endDrawing = () => {
+  const endDrawing = (e: React.MouseEvent | React.TouchEvent) => {
     if (!context) return;
     
+    e.preventDefault();
     setIsDrawing(false);
     context.closePath();
   };
@@ -98,7 +105,6 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     
     // Handle touch events
     if ('touches' in e) {
-      e.preventDefault(); // Prevent scrolling when drawing
       if (e.touches.length === 0) return null;
       clientX = e.touches[0].clientX;
       clientY = e.touches[0].clientY;
