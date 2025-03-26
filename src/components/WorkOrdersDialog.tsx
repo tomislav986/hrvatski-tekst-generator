@@ -191,7 +191,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
           </div>
           
           <div className="overflow-auto flex-grow">
-            <div className="min-w-[800px]">
+            <div className={isMobile ? "min-w-fit" : "min-w-[800px]"}>
               <Table>
                 <TableHeader className="bg-gray-100">
                   <TableRow>
@@ -204,12 +204,16 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                     </TableHead>
                     <TableHead>Radni nalog</TableHead>
                     <TableHead>Vrsta radnog naloga</TableHead>
-                    <TableHead>Korisnik i adresa</TableHead>
-                    <TableHead>Kontakt podaci</TableHead>
-                    <TableHead>Planirani datum</TableHead>
-                    <TableHead>Due date</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="w-24"></TableHead>
+                    {!isMobile && (
+                      <>
+                        <TableHead>Korisnik i adresa</TableHead>
+                        <TableHead>Kontakt podaci</TableHead>
+                        <TableHead>Planirani datum</TableHead>
+                        <TableHead>Due date</TableHead>
+                        <TableHead>Status</TableHead>
+                      </>
+                    )}
+                    <TableHead className="w-12"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -225,21 +229,25 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                       </TableCell>
                       <TableCell>{order.nalog}</TableCell>
                       <TableCell>{order.vrsta}</TableCell>
-                      <TableCell>{order.korisnik}</TableCell>
-                      <TableCell>{order.kontakt}</TableCell>
-                      <TableCell>{order.planirani_datum}</TableCell>
-                      <TableCell>{order.due_date}</TableCell>
-                      <TableCell>
-                        <span 
-                          className={`px-2 py-1 rounded text-sm ${
-                            order.status === "Za odraditi" ? "bg-yellow-100 text-yellow-800" : 
-                            order.status === "Aktivno" ? "bg-green-100 text-green-800" : 
-                            "bg-gray-100 text-gray-800"
-                          }`}
-                        >
-                          {order.status}
-                        </span>
-                      </TableCell>
+                      {!isMobile && (
+                        <>
+                          <TableCell>{order.korisnik}</TableCell>
+                          <TableCell>{order.kontakt}</TableCell>
+                          <TableCell>{order.planirani_datum}</TableCell>
+                          <TableCell>{order.due_date}</TableCell>
+                          <TableCell>
+                            <span 
+                              className={`px-2 py-1 rounded text-sm ${
+                                order.status === "Za odraditi" ? "bg-yellow-100 text-yellow-800" : 
+                                order.status === "Aktivno" ? "bg-green-100 text-green-800" : 
+                                "bg-gray-100 text-gray-800"
+                              }`}
+                            >
+                              {order.status}
+                            </span>
+                          </TableCell>
+                        </>
+                      )}
                       <TableCell>
                         <div className="flex space-x-1">
                           <Button 
@@ -250,9 +258,11 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                           >
                             <Edit className="h-4 w-4 text-gray-500" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <MoreHorizontal className="h-4 w-4 text-gray-500" />
-                          </Button>
+                          {!isMobile && (
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <MoreHorizontal className="h-4 w-4 text-gray-500" />
+                            </Button>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -264,11 +274,15 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                       </TableCell>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
+                      {!isMobile && (
+                        <>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                        </>
+                      )}
                       <TableCell></TableCell>
                     </TableRow>
                   ))}

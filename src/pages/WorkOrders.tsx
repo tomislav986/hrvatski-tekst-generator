@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -47,7 +46,7 @@ const WorkOrders = () => {
     { 
       id: "1", 
       nalog: "IN/1001/23", 
-      vrsta: "410-RN KW", // Added value for the first row
+      vrsta: "410-RN KW", 
       korisnik: "Marko Marković, Tina Ujevića 25", 
       kontakt: "099 123 45 67", 
       planirani_datum: "2022-01-23", 
@@ -58,7 +57,7 @@ const WorkOrders = () => {
     { 
       id: "2", 
       nalog: "IN/1002/23", 
-      vrsta: "440-RN Vozila", // Added value for the second row
+      vrsta: "440-RN Vozila", 
       korisnik: "Tim d.o.o., Zavojna 2b", 
       kontakt: "098 321 54 98", 
       planirani_datum: "2022-01-09", 
@@ -69,7 +68,7 @@ const WorkOrders = () => {
     { 
       id: "3", 
       nalog: "IN/1003/23", 
-      vrsta: "475-RN Vodomjeri", // Added value for the third row
+      vrsta: "475-RN Vodomjeri", 
       korisnik: "Tomislav Horvat, Uska 46", 
       kontakt: "098 111 22 33, tom@hh.hr", 
       planirani_datum: "2022-02-11", 
@@ -80,7 +79,7 @@ const WorkOrders = () => {
     { 
       id: "4", 
       nalog: "...", 
-      vrsta: "", // Added empty value for the fourth row
+      vrsta: "", 
       korisnik: "....", 
       kontakt: "....", 
       planirani_datum: "...", 
@@ -218,7 +217,7 @@ const WorkOrders = () => {
       </div>
       
       <div className="overflow-auto flex-grow">
-        <div className="min-w-[800px]"> {/* Add horizontal scrolling for smaller screens */}
+        <div className={isMobile ? "min-w-fit" : "min-w-[800px]"}>
           <Table>
             <TableHeader className="bg-gray-100">
               <TableRow>
@@ -231,12 +230,16 @@ const WorkOrders = () => {
                 </TableHead>
                 <TableHead>Radni nalog</TableHead>
                 <TableHead>Vrsta radnog naloga</TableHead>
-                <TableHead>Korisnik i adresa</TableHead>
-                <TableHead>Kontakt podaci</TableHead>
-                <TableHead>Planirani datum</TableHead>
-                <TableHead>Due date</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="w-24"></TableHead>
+                {!isMobile && (
+                  <>
+                    <TableHead>Korisnik i adresa</TableHead>
+                    <TableHead>Kontakt podaci</TableHead>
+                    <TableHead>Planirani datum</TableHead>
+                    <TableHead>Due date</TableHead>
+                    <TableHead>Status</TableHead>
+                  </>
+                )}
+                <TableHead className="w-12"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -252,21 +255,25 @@ const WorkOrders = () => {
                   </TableCell>
                   <TableCell>{order.nalog}</TableCell>
                   <TableCell>{order.vrsta}</TableCell>
-                  <TableCell>{order.korisnik}</TableCell>
-                  <TableCell>{order.kontakt}</TableCell>
-                  <TableCell>{order.planirani_datum}</TableCell>
-                  <TableCell>{order.due_date}</TableCell>
-                  <TableCell>
-                    <span 
-                      className={`px-2 py-1 rounded text-sm ${
-                        order.status === "Za odraditi" ? "bg-yellow-100 text-yellow-800" : 
-                        order.status === "Aktivno" ? "bg-green-100 text-green-800" : 
-                        "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {order.status}
-                    </span>
-                  </TableCell>
+                  {!isMobile && (
+                    <>
+                      <TableCell>{order.korisnik}</TableCell>
+                      <TableCell>{order.kontakt}</TableCell>
+                      <TableCell>{order.planirani_datum}</TableCell>
+                      <TableCell>{order.due_date}</TableCell>
+                      <TableCell>
+                        <span 
+                          className={`px-2 py-1 rounded text-sm ${
+                            order.status === "Za odraditi" ? "bg-yellow-100 text-yellow-800" : 
+                            order.status === "Aktivno" ? "bg-green-100 text-green-800" : 
+                            "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </TableCell>
+                    </>
+                  )}
                   <TableCell>
                     <div className="flex space-x-1">
                       <Button 
@@ -274,7 +281,6 @@ const WorkOrders = () => {
                         size="icon" 
                         className="h-8 w-8"
                         onClick={() => handleEditOrder(order.id)}
-                        data-lov-id="src/pages/WorkOrders.tsx:254:20"
                       >
                         <Edit className="h-4 w-4 text-gray-500" />
                       </Button>
@@ -289,11 +295,15 @@ const WorkOrders = () => {
                   </TableCell>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
+                  {!isMobile && (
+                    <>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                    </>
+                  )}
                   <TableCell></TableCell>
                 </TableRow>
               ))}
