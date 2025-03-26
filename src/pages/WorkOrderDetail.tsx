@@ -1,6 +1,6 @@
 
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,9 +20,15 @@ interface WorkOrderItem {
   amount: string;
 }
 
+interface LocationState {
+  orderType?: string;
+}
+
 const WorkOrderDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { orderType } = (location.state as LocationState) || {};
   
   const [formData, setFormData] = useState({
     nalog: "IN/1001/23",
@@ -33,7 +39,11 @@ const WorkOrderDetail = () => {
     stari_vodomjer_stanje: "",
     novi_vodomjer_serijski: "",
     novi_vodomjer_stanje: "",
+    vrsta: orderType || ""
   });
+
+  // Check if this is a water meter work order
+  const isWaterMeterOrder = formData.vrsta === "475-RN Vodomjeri";
 
   const [items, setItems] = useState<WorkOrderItem[]>([
     { 
@@ -82,6 +92,20 @@ const WorkOrderDetail = () => {
     }
   ]);
 
+  useEffect(() => {
+    // This would be where you'd fetch the order details from an API
+    console.log("Loading work order details for ID:", id);
+    console.log("Order type:", orderType);
+    
+    // For now we'll just use the mock data and update the type if it's provided
+    if (orderType) {
+      setFormData(prev => ({
+        ...prev,
+        vrsta: orderType
+      }));
+    }
+  }, [id, orderType]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -128,6 +152,17 @@ const WorkOrderDetail = () => {
           </div>
           
           <div>
+            <label htmlFor="vrsta" className="block text-sm font-medium mb-1">Vrsta radnog naloga:</label>
+            <Input 
+              id="vrsta"
+              name="vrsta"
+              value={formData.vrsta}
+              onChange={handleInputChange}
+              readOnly
+            />
+          </div>
+          
+          <div>
             <label htmlFor="korisnik" className="block text-sm font-medium mb-1">Korisnik i adresa:</label>
             <Input 
               id="korisnik"
@@ -160,56 +195,60 @@ const WorkOrderDetail = () => {
         </div>
         
         <div className="space-y-4">
-          <div>
-            <label htmlFor="stari_vodomjer_podaci" className="block text-sm font-medium mb-1">Podaci o starom vodomjeru:</label>
-            <Textarea
-              id="stari_vodomjer_podaci"
-              name="stari_vodomjer_podaci"
-              value={formData.stari_vodomjer_podaci}
-              onChange={handleInputChange}
-              className="min-h-[130px]"
-            />
-          </div>
+          {isWaterMeterOrder && (
+            <>
+              <div>
+                <label htmlFor="stari_vodomjer_podaci" className="block text-sm font-medium mb-1">Podaci o starom vodomjeru:</label>
+                <Textarea
+                  id="stari_vodomjer_podaci"
+                  name="stari_vodomjer_podaci"
+                  value={formData.stari_vodomjer_podaci}
+                  onChange={handleInputChange}
+                  className="min-h-[130px]"
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="stari_vodomjer_stanje" className="block text-sm font-medium mb-1">Stanje starog vodomjera:</label>
+                  <Input 
+                    id="stari_vodomjer_stanje"
+                    name="stari_vodomjer_stanje"
+                    value={formData.stari_vodomjer_stanje}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="novi_vodomjer_serijski" className="block text-sm font-medium mb-1">Serijski broj novog vodomjera:</label>
+                  <Input 
+                    id="novi_vodomjer_serijski"
+                    name="novi_vodomjer_serijski"
+                    value={formData.novi_vodomjer_serijski}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="novi_vodomjer_stanje" className="block text-sm font-medium mb-1">Stanje novog vodomjera:</label>
+                  <Input 
+                    id="novi_vodomjer_stanje"
+                    name="novi_vodomjer_stanje"
+                    value={formData.novi_vodomjer_stanje}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+            </>
+          )}
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="stari_vodomjer_stanje" className="block text-sm font-medium mb-1">Stanje starog vodomjera:</label>
-              <Input 
-                id="stari_vodomjer_stanje"
-                name="stari_vodomjer_stanje"
-                value={formData.stari_vodomjer_stanje}
-                onChange={handleInputChange}
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="novi_vodomjer_serijski" className="block text-sm font-medium mb-1">Serijski broj novog vodomjera:</label>
-              <Input 
-                id="novi_vodomjer_serijski"
-                name="novi_vodomjer_serijski"
-                value={formData.novi_vodomjer_serijski}
-                onChange={handleInputChange}
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="novi_vodomjer_stanje" className="block text-sm font-medium mb-1">Stanje novog vodomjera:</label>
-              <Input 
-                id="novi_vodomjer_stanje"
-                name="novi_vodomjer_stanje"
-                value={formData.novi_vodomjer_stanje}
-                onChange={handleInputChange}
-              />
-            </div>
-            
-            <div className="flex items-end">
-              <Button 
-                onClick={handleAddNewItem}
-                className="bg-gray-800 hover:bg-gray-700"
-              >
-                Nova stavka
-              </Button>
-            </div>
+          <div className={`flex ${isWaterMeterOrder ? 'md:items-end' : 'items-start'} ${isWaterMeterOrder ? 'md:mt-0' : 'mt-4'}`}>
+            <Button 
+              onClick={handleAddNewItem}
+              className="bg-gray-800 hover:bg-gray-700"
+            >
+              Nova stavka
+            </Button>
           </div>
         </div>
       </div>

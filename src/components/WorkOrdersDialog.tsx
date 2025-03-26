@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -55,7 +54,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     { 
       id: "1", 
       nalog: "IN/1001/23", 
-      vrsta: "410-RN KW", // Added value for the first row
+      vrsta: "410-RN KW", 
       korisnik: "Marko Marković, Tina Ujevića 25", 
       kontakt: "099 123 45 67", 
       planirani_datum: "2022-01-23", 
@@ -66,7 +65,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     { 
       id: "2", 
       nalog: "IN/1002/23", 
-      vrsta: "440-RN Vozila", // Added value for the second row
+      vrsta: "440-RN Vozila", 
       korisnik: "Tim d.o.o., Zavojna 2b", 
       kontakt: "098 321 54 98", 
       planirani_datum: "2022-01-09", 
@@ -77,7 +76,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     { 
       id: "3", 
       nalog: "IN/1003/23", 
-      vrsta: "475-RN Vodomjeri", // Added value for the third row
+      vrsta: "475-RN Vodomjeri", 
       korisnik: "Tomislav Horvat, Uska 46", 
       kontakt: "098 111 22 33, tom@hh.hr", 
       planirani_datum: "2022-02-11", 
@@ -88,7 +87,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     { 
       id: "4", 
       nalog: "...", 
-      vrsta: "", // Added empty value for the fourth row
+      vrsta: "", 
       korisnik: "....", 
       kontakt: "....", 
       planirani_datum: "...", 
@@ -120,9 +119,9 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     setFilterType(type);
   };
 
-  const handleEditOrder = (id: string) => {
+  const handleEditOrder = (id: string, vrsta: string) => {
     onOpenChange(false);
-    navigate(`/work-orders/${id}`);
+    navigate(`/work-orders/${id}`, { state: { orderType: vrsta } });
   };
 
   return (
@@ -192,7 +191,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
           </div>
           
           <div className="overflow-auto flex-grow">
-            <div className="min-w-[800px]"> {/* Add horizontal scrolling for smaller screens */}
+            <div className="min-w-[800px]">
               <Table>
                 <TableHeader className="bg-gray-100">
                   <TableRow>
@@ -247,7 +246,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                             variant="ghost" 
                             size="icon" 
                             className="h-8 w-8"
-                            onClick={() => handleEditOrder(order.id)}
+                            onClick={() => handleEditOrder(order.id, order.vrsta)}
                           >
                             <Edit className="h-4 w-4 text-gray-500" />
                           </Button>
