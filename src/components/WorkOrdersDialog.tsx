@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -27,6 +28,7 @@ import {
 interface WorkOrder {
   id: string;
   nalog: string;
+  vrsta: string; // Added new field for "Vrsta radnog naloga"
   korisnik: string;
   kontakt: string;
   planirani_datum: string;
@@ -50,6 +52,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     { 
       id: "1", 
       nalog: "IN/1001/23", 
+      vrsta: "410-RN KW", // Added value for the first row
       korisnik: "Marko Marković, Tina Ujevića 25", 
       kontakt: "099 123 45 67", 
       planirani_datum: "2022-01-23", 
@@ -60,6 +63,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     { 
       id: "2", 
       nalog: "IN/1002/23", 
+      vrsta: "440-RN Vozila", // Added value for the second row
       korisnik: "Tim d.o.o., Zavojna 2b", 
       kontakt: "098 321 54 98", 
       planirani_datum: "2022-01-09", 
@@ -70,6 +74,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     { 
       id: "3", 
       nalog: "IN/1003/23", 
+      vrsta: "475-RN Vodomjeri", // Added value for the third row
       korisnik: "Tomislav Horvat, Uska 46", 
       kontakt: "098 111 22 33, tom@hh.hr", 
       planirani_datum: "2022-02-11", 
@@ -80,6 +85,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     { 
       id: "4", 
       nalog: "...", 
+      vrsta: "", // Added empty value for the fourth row
       korisnik: "....", 
       kontakt: "....", 
       planirani_datum: "...", 
@@ -194,6 +200,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                     />
                   </TableHead>
                   <TableHead>Radni nalog</TableHead>
+                  <TableHead>Vrsta radnog naloga</TableHead> {/* Added new column header */}
                   <TableHead>Korisnik i adresa</TableHead>
                   <TableHead>Kontakt podaci</TableHead>
                   <TableHead>Planirani datum</TableHead>
@@ -214,6 +221,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                       />
                     </TableCell>
                     <TableCell>{order.nalog}</TableCell>
+                    <TableCell>{order.vrsta}</TableCell> {/* Added new column cell */}
                     <TableCell>{order.korisnik}</TableCell>
                     <TableCell>{order.kontakt}</TableCell>
                     <TableCell>{order.planirani_datum}</TableCell>
@@ -252,6 +260,7 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                       <Checkbox />
                     </TableCell>
                     <TableCell></TableCell>
+                    <TableCell></TableCell> {/* Added new empty cell */}
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
