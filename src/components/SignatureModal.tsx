@@ -27,7 +27,7 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
 
   // Initialize canvas
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || !open) return;
     
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -50,14 +50,9 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
       ctx.fillStyle = "#000000"; // Black color for dot drawing
     };
     
-    // Only clear canvas and reset hasContent when modal is opened
-    if (open) {
-      console.log("Modal opened, clearing canvas and resetting hasContent");
-      resizeCanvas();
-      setHasContent(false);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    
+    resizeCanvas();
+    setHasContent(false); // Reset content flag when reopening
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas when reopening
     window.addEventListener("resize", resizeCanvas);
     setContext(ctx);
     
