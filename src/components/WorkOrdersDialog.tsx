@@ -1,5 +1,5 @@
-
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -41,6 +41,7 @@ interface WorkOrdersDialogProps {
 }
 
 const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | null>("Status");
   const [filterType, setFilterType] = useState<string | null>(null);
@@ -108,6 +109,11 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
 
   const handleFilterTypeSelect = (type: string) => {
     setFilterType(type);
+  };
+
+  const handleEditOrder = (id: string) => {
+    onOpenChange(false);
+    navigate(`/work-orders/${id}`);
   };
 
   return (
@@ -225,7 +231,12 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-1">
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8"
+                          onClick={() => handleEditOrder(order.id)}
+                        >
                           <Edit className="h-4 w-4 text-gray-500" />
                         </Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8">

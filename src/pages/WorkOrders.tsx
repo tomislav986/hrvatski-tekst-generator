@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -10,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Search, ChevronDown, X, Edit, MoreHorizontal, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Search, ChevronDown, X, Edit, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import {
   DropdownMenu,
@@ -32,6 +33,7 @@ interface WorkOrder {
 }
 
 const WorkOrders = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | null>("Status");
   const [filterType, setFilterType] = useState<string | null>(null);
@@ -124,6 +126,10 @@ const WorkOrders = () => {
       order.selected ? { ...order, status: "Završeno", selected: false } : order
     ));
     toast(`${selectedOrders.length} nalog(a) označeno kao završeno.`);
+  };
+
+  const handleEditOrder = (id: string) => {
+    navigate(`/work-orders/${id}`);
   };
 
   return (
@@ -251,10 +257,16 @@ const WorkOrders = () => {
                 </TableCell>
                 <TableCell>
                   <div className="flex space-x-1">
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-8 w-8"
+                      onClick={() => handleEditOrder(order.id)}
+                      data-lov-id="src/pages/WorkOrders.tsx:254:20"
+                    >
                       <Edit className="h-4 w-4 text-gray-500" />
                     </Button>
-                                   </div>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
