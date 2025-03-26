@@ -1,5 +1,5 @@
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,148 +21,140 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
   const isMobile = useIsMobile();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const lastPositionRef = useRef<{ x: number; y: number } | null>(null);
   const [hasContent, setHasContent] = useState(false);
-
-  // Initialize canvas context only once
+  
+  // Initialize canvas and context when modal opens
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!open || !canvasRef.current) return;
     
+    console.log("Modal opened - initializing canvas");
+    
+    // Get the canvas and clear previous state
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     
-    if (!ctx) return;
-    
-    setContext(ctx);
+    if (!ctx) {
+      console.error("Failed to get canvas context");
+      return;
+    }
     
     // Set canvas dimensions to match container
-    const resizeCanvas = () => {
-      const container = canvas.parentElement;
+    const container = canvas.parentElement;
+    if (container) {
+      canvas.width = container.clientWidth;
+      canvas.height = 300;
+    }
+    
+    // Clear any existing content
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Configure drawing settings
+    ctx.lineWidth = 5;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "#000000";
+    ctx.fillStyle = "#000000";
+    
+    // Reset state
+    setHasContent(false);
+    setIsDrawing(false);
+    lastPositionRef.current = null;
+    
+    console.log("Canvas initialization complete");
+    
+    // Add resize handler
+    const handleResize = () => {
       if (!container) return;
       
+      // Save current drawing if any
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      
+      // Resize canvas
       canvas.width = container.clientWidth;
-      canvas.height = 300; // Fixed height
+      canvas.height = 300;
       
-      // Reset drawing settings after resize
-      ctx.lineWidth = 5; // Thicker line for better visibility
-      ctx.lineJoin = "round";
-      ctx.lineCap = "round";
-      ctx.strokeStyle = "#000000"; // Black color
-      ctx.fillStyle = "#000000"; // Black color for dot drawing
-    };
-    
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas(); // Call immediately to set initial size
-    
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-    };
-  }, []);
-
-  // Reset canvas when modal opens - this is critical for ensuring drawing works each time
-  useEffect(() => {
-    if (!canvasRef.current) return;
-    
-    // Get the canvas element and ensure it has a context
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    
-    // Only reset when the modal is open
-    if (open) {
-      console.log("Modal opened, resetting canvas and context");
-      
-      // Resize the canvas to fit the container
-      const container = canvas.parentElement;
-      if (container) {
-        canvas.width = container.clientWidth;
-        canvas.height = 300;
-      }
-      
-      // Clear any existing content
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Reset the drawing settings
+      // Restore drawing settings
       ctx.lineWidth = 5;
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
       ctx.strokeStyle = "#000000";
       ctx.fillStyle = "#000000";
       
-      // Make sure the context is set
-      setContext(ctx);
-      
-      // Reset state
-      setHasContent(false);
-      setIsDrawing(false);
-      lastPositionRef.current = null;
-      
-      console.log("Canvas reset complete, hasContent:", false);
-    }
+      // Restore previous drawing
+      ctx.putImageData(imageData, 0, 0);
+    };
+    
+    window.addEventListener("resize", handleResize);
+    
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [open]);
-
-  // Start drawing function
-  const startDrawing = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    if (!context || !canvasRef.current) return;
+  
+  // Handle drawing start
+  const handleDrawStart = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    
+    if (!canvasRef.current) return;
+    
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    
+    if (!ctx) return;
     
     setIsDrawing(true);
     
-    // Get the position
-    const position = getEventPosition(e);
-    if (!position) return;
+    // Get position
+    const pos = getEventPosition(e, canvas);
+    if (!pos) return;
     
-    lastPositionRef.current = position;
+    // Draw starting dot
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, 2, 0, Math.PI * 2);
+    ctx.fill();
     
-    // Draw a small dot at the start point
-    context.beginPath();
-    context.fillStyle = "#000000";
-    context.arc(position.x, position.y, 3, 0, 2 * Math.PI);
-    context.fill();
+    lastPositionRef.current = pos;
+    setHasContent(true);
     
-    setHasContent(true); // Set content flag when user starts drawing
-    console.log("Drawing started, hasContent set to:", true);
-    
-    // Prevent default behavior to avoid page scrolling/selection
-    e.preventDefault();
-  }, [context]);
+    console.log("Drawing started at", pos);
+  };
   
-  // Drawing function
-  const draw = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDrawing || !context || !canvasRef.current || !lastPositionRef.current) return;
-    
-    // Prevent default behavior
+  // Handle drawing motion
+  const handleDrawMove = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
     
-    // Get the current position
-    const currentPosition = getEventPosition(e);
-    if (!currentPosition) return;
-    
-    // Draw a line from the last position to the current one
-    context.beginPath();
-    context.strokeStyle = "#000000"; // Ensure black color for stroke
-    context.lineWidth = 5; // Thicker line for better visibility
-    context.moveTo(lastPositionRef.current.x, lastPositionRef.current.y);
-    context.lineTo(currentPosition.x, currentPosition.y);
-    context.stroke();
-    
-    // Update the last position
-    lastPositionRef.current = currentPosition;
-    setHasContent(true); // Ensure content flag is set during drawing
-  }, [isDrawing, context]);
-  
-  // End drawing function
-  const endDrawing = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    setIsDrawing(false);
-    lastPositionRef.current = null;
-    e.preventDefault();
-  }, []);
-  
-  // Get position for both mouse and touch events
-  const getEventPosition = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!canvasRef.current) return null;
+    if (!isDrawing || !canvasRef.current || !lastPositionRef.current) return;
     
     const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    
+    if (!ctx) return;
+    
+    // Get current position
+    const currentPos = getEventPosition(e, canvas);
+    if (!currentPos) return;
+    
+    // Draw line from last position to current
+    ctx.beginPath();
+    ctx.moveTo(lastPositionRef.current.x, lastPositionRef.current.y);
+    ctx.lineTo(currentPos.x, currentPos.y);
+    ctx.stroke();
+    
+    // Update last position
+    lastPositionRef.current = currentPos;
+    setHasContent(true);
+  };
+  
+  // Handle drawing end
+  const handleDrawEnd = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    setIsDrawing(false);
+    lastPositionRef.current = null;
+  };
+  
+  // Helper to get position from mouse or touch event
+  const getEventPosition = (e: React.MouseEvent | React.TouchEvent, canvas: HTMLCanvasElement) => {
     const rect = canvas.getBoundingClientRect();
     
     let clientX, clientY;
@@ -185,13 +177,19 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
     };
   };
   
-  // Clear the canvas
+  // Clear the signature
   const handleClear = () => {
-    if (!canvasRef.current || !context) return;
+    if (!canvasRef.current) return;
     
-    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    setHasContent(false); // Reset content flag when cleared
-    console.log("Canvas cleared, hasContent reset to:", false);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    
+    if (!ctx) return;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    setHasContent(false);
+    
+    console.log("Canvas cleared");
     toast("Potpis obrisan");
   };
   
@@ -199,21 +197,16 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
   const handleSave = () => {
     if (!canvasRef.current) return;
     
+    console.log("Attempting to save signature. Has content:", hasContent);
+    
+    if (!hasContent) {
+      toast.error("Molimo nacrtajte potpis prije spremanja");
+      return;
+    }
+    
     try {
-      console.log("Checking signature content. Has content:", hasContent);
-      
-      // Check if there is content to save
-      if (!hasContent) {
-        toast.error("Molimo nacrtajte potpis prije spremanja");
-        console.log("No content to save");
-        return;
-      }
-      
-      // Convert to image data URL
       const dataUrl = canvasRef.current.toDataURL("image/png");
-      console.log("Signature saved:", dataUrl.substring(0, 50) + "...");
-      
-      // Here you could store the dataUrl to state, context, or send to server
+      console.log("Signature saved successfully");
       toast.success("Potpis spremljen");
       onOpenChange(false);
     } catch (error) {
@@ -237,13 +230,13 @@ const SignatureModal = ({ open, onOpenChange }: SignatureModalProps) => {
             <canvas
               ref={canvasRef}
               className="w-full h-full cursor-crosshair touch-none"
-              onMouseDown={startDrawing}
-              onMouseMove={draw}
-              onMouseUp={endDrawing}
-              onMouseLeave={endDrawing}
-              onTouchStart={startDrawing}
-              onTouchMove={draw}
-              onTouchEnd={endDrawing}
+              onMouseDown={handleDrawStart}
+              onMouseMove={handleDrawMove}
+              onMouseUp={handleDrawEnd}
+              onMouseLeave={handleDrawEnd}
+              onTouchStart={handleDrawStart}
+              onTouchMove={handleDrawMove}
+              onTouchEnd={handleDrawEnd}
             />
           </div>
         </div>
