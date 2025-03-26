@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Check, X } from "lucide-react";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface WorkOrderItem {
   id: number;
@@ -29,6 +30,7 @@ const WorkOrderDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { orderType } = (location.state as LocationState) || {};
+  const isMobile = useIsMobile();
   
   const [formData, setFormData] = useState({
     nalog: "IN/1001/23",
@@ -285,25 +287,25 @@ const WorkOrderDetail = () => {
         <Table>
           <TableHeader>
             <TableRow className="bg-gray-100">
-              <TableHead className="w-12 text-center">Rb</TableHead>
-              <TableHead>Šifra</TableHead>
-              <TableHead>Naziv operacije/materijala</TableHead>
-              <TableHead>J.mj</TableHead>
-              <TableHead>Djelatnik (opcionalno)</TableHead>
-              <TableHead>Količina (plan)</TableHead>
-              <TableHead>Izvršena količina</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Amount</TableHead>
+              {!isMobile && <TableHead className="w-12 text-center">Rb</TableHead>}
+              {!isMobile && <TableHead>Šifra</TableHead>}
+              <TableHead>{isMobile ? "Naziv" : "Naziv operacije/materijala"}</TableHead>
+              {!isMobile && <TableHead>J.mj</TableHead>}
+              {!isMobile && <TableHead>Djelatnik (opcionalno)</TableHead>}
+              <TableHead>{isMobile ? "Plan" : "Količina (plan)"}</TableHead>
+              <TableHead>{isMobile ? "Izvr." : "Izvršena količina"}</TableHead>
+              {!isMobile && <TableHead>Status</TableHead>}
+              {!isMobile && <TableHead>Amount</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
             {items.map((item) => (
               <TableRow key={item.id}>
-                <TableCell className="text-center">{item.id}</TableCell>
-                <TableCell>{item.sifra}</TableCell>
+                {!isMobile && <TableCell className="text-center">{item.id}</TableCell>}
+                {!isMobile && <TableCell>{item.sifra}</TableCell>}
                 <TableCell>{item.naziv}</TableCell>
-                <TableCell>{item.jmj}</TableCell>
-                <TableCell>{item.djelatnik}</TableCell>
+                {!isMobile && <TableCell>{item.jmj}</TableCell>}
+                {!isMobile && <TableCell>{item.djelatnik}</TableCell>}
                 <TableCell>{item.kolicina_plan}</TableCell>
                 <TableCell>
                   {typeof item.izvrsena_kolicina === 'number' ? (
@@ -326,28 +328,32 @@ const WorkOrderDetail = () => {
                     <Input value={item.izvrsena_kolicina} readOnly />
                   )}
                 </TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell className="flex items-center gap-2">
-                  {item.amount}
-                  {item.status === "Paid" || item.status === "Unpaid" ? (
-                    <Check className="text-green-500 h-5 w-5" />
-                  ) : (
-                    <X className="text-red-500 h-5 w-5" />
-                  )}
-                </TableCell>
+                {!isMobile && (
+                  <TableCell>{item.status}</TableCell>
+                )}
+                {!isMobile && (
+                  <TableCell className="flex items-center gap-2">
+                    {item.amount}
+                    {item.status === "Paid" || item.status === "Unpaid" ? (
+                      <Check className="text-green-500 h-5 w-5" />
+                    ) : (
+                      <X className="text-red-500 h-5 w-5" />
+                    )}
+                  </TableCell>
+                )}
               </TableRow>
             ))}
             {[...Array(6)].map((_, i) => (
               <TableRow key={`empty-${i}`}>
+                {!isMobile && <TableCell></TableCell>}
+                {!isMobile && <TableCell></TableCell>}
+                <TableCell></TableCell>
+                {!isMobile && <TableCell></TableCell>}
+                {!isMobile && <TableCell></TableCell>}
                 <TableCell></TableCell>
                 <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
+                {!isMobile && <TableCell></TableCell>}
+                {!isMobile && <TableCell></TableCell>}
               </TableRow>
             ))}
           </TableBody>
