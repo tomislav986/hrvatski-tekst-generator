@@ -83,7 +83,7 @@ const WorkOrderDetail = () => {
     const executedNum = Number(executed);
     
     if (executedNum >= planNum) {
-      return "bg-[#F2FCE2]"; // Soft green
+      return "bg-[#A1F7A7]"; // Soft green
     } else if (executedNum > 0) {
       return "bg-[#FEF7CD]"; // Soft yellow
     } else {
