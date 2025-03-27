@@ -96,7 +96,7 @@ const WorkOrderDetail = () => {
       setFormData(prev => ({
         ...prev,
         vrsta: "410-RN KW",
-        nalog: "IN/1001/23",
+        nalog: "2025-410-23", // Updated work order number here
         korisnik: "Marko Marković, Tina Ujevića 25",
         kontakt: "099 123 45 67"
       }));
