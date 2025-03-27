@@ -35,7 +35,7 @@ const WorkOrders = () => {
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([
     { 
       id: "1", 
-      nalog: "IN/1001/23", 
+      nalog: "2025-410-23", 
       vrsta: "410-RN KW", 
       korisnik: "Marko Marković, Tina Ujevića 25", 
       kontakt: "099 123 45 67", 
@@ -46,7 +46,7 @@ const WorkOrders = () => {
     },
     { 
       id: "2", 
-      nalog: "IN/1002/23", 
+      nalog: "2025-440-35", 
       vrsta: "440-RN Vozila", 
       korisnik: "Tim d.o.o., Zavojna 2b", 
       kontakt: "098 321 54 98", 
@@ -57,7 +57,7 @@ const WorkOrders = () => {
     },
     { 
       id: "3", 
-      nalog: "IN/1003/23", 
+      nalog: "2025-475-12", 
       vrsta: "475-RN Vodomjeri", 
       korisnik: "Tomislav Horvat, Uska 46", 
       kontakt: "098 111 22 33, tom@hh.hr", 
