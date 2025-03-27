@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -75,6 +76,20 @@ const WorkOrderDetail = () => {
       amount: "1500"
     }
   ]);
+
+  // Get row background color based on quantities
+  const getRowBackgroundColor = (plan: number | string, executed: number | string) => {
+    const planNum = Number(plan);
+    const executedNum = Number(executed);
+    
+    if (executedNum >= planNum) {
+      return "bg-[#F2FCE2]"; // Soft green
+    } else if (executedNum > 0) {
+      return "bg-[#FEF7CD]"; // Soft yellow
+    } else {
+      return "bg-[#FEC6A1]"; // Soft red
+    }
+  };
 
   useEffect(() => {
     console.log("Loading work order details for ID:", id);
@@ -308,7 +323,10 @@ const WorkOrderDetail = () => {
           </TableHeader>
           <TableBody>
             {items.map((item) => (
-              <TableRow key={item.id}>
+              <TableRow 
+                key={item.id}
+                className={getRowBackgroundColor(item.kolicina_plan, item.izvrsena_kolicina)}
+              >
                 {!isMobile && <TableCell className="text-center">{item.id}</TableCell>}
                 {!isMobile && <TableCell>{item.sifra}</TableCell>}
                 <TableCell>{item.naziv}</TableCell>
@@ -323,8 +341,11 @@ const WorkOrderDetail = () => {
                         value={item.izvrsena_kolicina}
                         onChange={(e) => {
                           const newItems = [...items];
-                          newItems[item.id - 1].izvrsena_kolicina = parseFloat(e.target.value);
-                          setItems(newItems);
+                          const index = newItems.findIndex(i => i.id === item.id);
+                          if (index !== -1) {
+                            newItems[index].izvrsena_kolicina = parseFloat(e.target.value);
+                            setItems(newItems);
+                          }
                         }}
                         className="pr-8"
                       />
@@ -337,7 +358,14 @@ const WorkOrderDetail = () => {
                   )}
                 </TableCell>
                 <TableCell>
-              
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleDeleteItem(item.id)}
+                    className="h-8 w-8 p-0"
+                  >
+                    <Trash className="h-4 w-4" />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
