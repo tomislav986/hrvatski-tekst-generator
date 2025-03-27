@@ -23,18 +23,6 @@ import { toast } from "sonner";
 import { useIsMobile, useIsSmallMobile } from "@/hooks/use-mobile";
 import WorkOrderModal, { WorkOrder } from "@/components/WorkOrderModal";
 
-interface WorkOrder {
-  id: string;
-  nalog: string;
-  vrsta: string;
-  korisnik: string;
-  kontakt: string;
-  planirani_datum: string;
-  due_date: string;
-  status: string;
-  selected?: boolean;
-}
-
 const WorkOrders = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
