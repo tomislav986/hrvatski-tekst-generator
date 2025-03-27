@@ -74,17 +74,6 @@ const WorkOrderDetail = () => {
       izvrsena_kolicina: 1.5, 
       status: "Paid", 
       amount: "$1,259.00" 
-    },
-    { 
-      id: 4, 
-      sifra: "...", 
-      naziv: "...", 
-      jmj: "...", 
-      djelatnik: "...", 
-      kolicina_plan: "..", 
-      izvrsena_kolicina: "..", 
-      status: "..", 
-      amount: ".." 
     }
   ]);
 
