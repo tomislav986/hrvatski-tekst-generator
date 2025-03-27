@@ -26,7 +26,6 @@ const WorkOrderDetail = () => {
   const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
   const [isNewItemModalOpen, setIsNewItemModalOpen] = useState(false);
   
-  // Početno stanje bez definiranih vrijednosti
   const [formData, setFormData] = useState({
     nalog: "",
     korisnik: "",
@@ -180,6 +179,7 @@ const WorkOrderDetail = () => {
               name="nalog"
               value={formData.nalog}
               readOnly
+              disabled
               className="bg-gray-100"
             />
           </div>
@@ -191,6 +191,7 @@ const WorkOrderDetail = () => {
               name="vrsta"
               value={formData.vrsta}
               readOnly
+              disabled
               className="bg-gray-100"
             />
           </div>
@@ -202,6 +203,7 @@ const WorkOrderDetail = () => {
               name="korisnik"
               value={formData.korisnik}
               readOnly
+              disabled
               className="bg-gray-100"
             />
           </div>
@@ -213,6 +215,7 @@ const WorkOrderDetail = () => {
               name="kontakt"
               value={formData.kontakt}
               readOnly
+              disabled
               className="bg-gray-100"
             />
           </div>
@@ -224,6 +227,7 @@ const WorkOrderDetail = () => {
               name="opis"
               value={formData.opis}
               readOnly
+              disabled
               className="min-h-[100px] bg-gray-100"
             />
           </div>
