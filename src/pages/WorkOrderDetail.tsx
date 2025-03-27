@@ -95,7 +95,7 @@ const WorkOrderDetail = () => {
       setFormData(prev => ({
         ...prev,
         vrsta: "440-RN Vozila",
-        nalog: "IN/1002/23",
+        nalog: "2025-440-35",
         korisnik: "Tim d.o.o., Zavojna 2b",
         kontakt: "098 321 54 98"
       }));
@@ -104,7 +104,7 @@ const WorkOrderDetail = () => {
       setFormData(prev => ({
         ...prev,
         vrsta: "475-RN Vodomjeri",
-        nalog: "IN/1003/23",
+        nalog: "2025-475-12",
         korisnik: "Tomislav Horvat, Uska 46",
         kontakt: "098 111 22 33, tom@hh.hr"
       }));
