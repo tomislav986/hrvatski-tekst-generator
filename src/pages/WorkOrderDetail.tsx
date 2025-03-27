@@ -297,8 +297,6 @@ const WorkOrderDetail = () => {
               {!isMobile && <TableHead>Djelatnik (opcionalno)</TableHead>}
               <TableHead>{isMobile ? "Plan" : "Količina (plan)"}</TableHead>
               <TableHead>{isMobile ? "Izvr." : "Izvršena količina"}</TableHead>
-              {!isMobile && <TableHead>Status</TableHead>}
-              {!isMobile && <TableHead>Amount</TableHead>}
               <TableHead className="w-10"></TableHead>
             </TableRow>
           </TableHeader>
@@ -332,30 +330,9 @@ const WorkOrderDetail = () => {
                     <Input value={item.izvrsena_kolicina} readOnly />
                   )}
                 </TableCell>
-                {!isMobile && (
-                  <TableCell>{item.status}</TableCell>
-                )}
-                {!isMobile && (
-                  <TableCell className="flex items-center gap-2">
-                    {item.amount}
-                    {item.status === "Paid" || item.status === "Unpaid" ? (
-                      <Check className="text-green-500 h-5 w-5" />
-                    ) : (
-                      <X className="text-red-500 h-5 w-5" />
-                    )}
-                  </TableCell>
-                )}
-                <TableCell className="p-2">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={() => handleDeleteItem(item.id)}
-                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <Trash className="h-4 w-4" />
-                    <span className="sr-only">Izbriši stavku</span>
-                  </Button>
-                </TableCell>
+         
+             
+             
               </TableRow>
             ))}
           </TableBody>
