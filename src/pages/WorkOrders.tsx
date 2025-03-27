@@ -65,18 +65,7 @@ const WorkOrders = () => {
       due_date: "2022-02-24", 
       status: "Završeno",
       selected: false
-    },
-    { 
-      id: "4", 
-      nalog: "...", 
-      vrsta: "", 
-      korisnik: "....", 
-      kontakt: "....", 
-      planirani_datum: "...", 
-      due_date: "...", 
-      status: "Završeno",
-      selected: false
-    },
+    }
   ]);
 
   const handleSelectAllChange = (checked: boolean) => {
