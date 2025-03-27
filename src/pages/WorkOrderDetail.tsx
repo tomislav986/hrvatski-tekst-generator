@@ -358,14 +358,7 @@ const WorkOrderDetail = () => {
                   )}
                 </TableCell>
                 <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDeleteItem(item.id)}
-                    className="h-8 w-8 p-0"
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
+                
                 </TableCell>
               </TableRow>
             ))}
