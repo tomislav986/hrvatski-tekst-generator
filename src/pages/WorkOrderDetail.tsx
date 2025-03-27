@@ -49,7 +49,9 @@ const WorkOrderDetail = () => {
       jmj: "kom", 
       djelatnik: "Ivan", 
       kolicina_plan: 5, 
-      izvrsena_kolicina: 5
+      izvrsena_kolicina: 5,
+      status: "Completed",
+      amount: "500"
     },
     { 
       id: 2, 
@@ -58,7 +60,9 @@ const WorkOrderDetail = () => {
       jmj: "kom", 
       djelatnik: "Marko", 
       kolicina_plan: 10, 
-      izvrsena_kolicina: 10
+      izvrsena_kolicina: 10,
+      status: "Completed",
+      amount: "1000"
     },
     { 
       id: 3, 
@@ -67,7 +71,9 @@ const WorkOrderDetail = () => {
       jmj: "m3", 
       djelatnik: "Ivan", 
       kolicina_plan: 1.5, 
-      izvrsena_kolicina: 1.5
+      izvrsena_kolicina: 1.5,
+      status: "Completed",
+      amount: "1500"
     }
   ]);
 
