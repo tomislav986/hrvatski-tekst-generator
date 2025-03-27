@@ -49,9 +49,7 @@ const WorkOrderDetail = () => {
       jmj: "kom", 
       djelatnik: "Ivan", 
       kolicina_plan: 5, 
-      izvrsena_kolicina: 5, 
-      status: "Unpaid", 
-      amount: "$2,350.00" 
+      izvrsena_kolicina: 5
     },
     { 
       id: 2, 
@@ -60,9 +58,7 @@ const WorkOrderDetail = () => {
       jmj: "kom", 
       djelatnik: "Marko", 
       kolicina_plan: 10, 
-      izvrsena_kolicina: 10, 
-      status: "Pending", 
-      amount: "$259.00" 
+      izvrsena_kolicina: 10
     },
     { 
       id: 3, 
@@ -71,10 +67,8 @@ const WorkOrderDetail = () => {
       jmj: "m3", 
       djelatnik: "Ivan", 
       kolicina_plan: 1.5, 
-      izvrsena_kolicina: 1.5, 
-      status: "Paid", 
-      amount: "$1,259.00" 
-    }
+      izvrsena_kolicina: 1.5
+      }
   ]);
 
   useEffect(() => {
