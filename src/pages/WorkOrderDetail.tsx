@@ -68,7 +68,7 @@ const WorkOrderDetail = () => {
       djelatnik: "Ivan", 
       kolicina_plan: 1.5, 
       izvrsena_kolicina: 1.5
-      }
+    }
   ]);
 
   useEffect(() => {
@@ -324,9 +324,16 @@ const WorkOrderDetail = () => {
                     <Input value={item.izvrsena_kolicina} readOnly />
                   )}
                 </TableCell>
-         
-             
-             
+                <TableCell>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={() => handleDeleteItem(item.id)}
+                    className="h-8 w-8 p-0 text-gray-500 hover:text-red-500"
+                  >
+                    <Trash className="h-4 w-4" />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
