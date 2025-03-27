@@ -27,10 +27,11 @@ const WorkOrderDetail = () => {
   const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
   const [isNewItemModalOpen, setIsNewItemModalOpen] = useState(false);
   
+  // Početno stanje bez definiranih vrijednosti
   const [formData, setFormData] = useState({
-    nalog: "IN/1001/23",
-    korisnik: "Marko Marković, Tina Ujevića 25",
-    kontakt: "099 123 45 67",
+    nalog: "",
+    korisnik: "",
+    kontakt: "",
     opis: "Detaljan opis radova na nalogu",
     stari_vodomjer_podaci: "",
     stari_vodomjer_stanje: "",
@@ -85,7 +86,7 @@ const WorkOrderDetail = () => {
       setFormData(prev => ({
         ...prev,
         vrsta: "410-RN KW",
-        nalog: "2025-410-23", // Updated work order number here
+        nalog: "2025-410-23",
         korisnik: "Marko Marković, Tina Ujevića 25",
         kontakt: "099 123 45 67"
       }));
