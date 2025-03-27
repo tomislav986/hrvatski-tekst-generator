@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -119,7 +118,9 @@ const WorkOrderDetail = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (!["nalog", "vrsta", "korisnik", "kontakt", "opis"].includes(name)) {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleAddNewItem = () => {
@@ -127,11 +128,9 @@ const WorkOrderDetail = () => {
   };
 
   const addNewItem = (newItem: WorkOrderItem) => {
-    // Generate a new ID for the item
     const newId = Math.max(0, ...items.map(item => Number(item.id) || 0)) + 1;
     const itemWithId = { ...newItem, id: newId };
     
-    // Add the new item to the list
     setItems([...items, itemWithId]);
     
     toast("Nova stavka dodana", {
@@ -142,7 +141,6 @@ const WorkOrderDetail = () => {
   const handleDeleteItem = (idToDelete: number | undefined) => {
     if (idToDelete === undefined) return;
     
-    // Filter out the item with the matching ID
     const updatedItems = items.filter(item => item.id !== idToDelete);
     setItems(updatedItems);
     
@@ -181,7 +179,8 @@ const WorkOrderDetail = () => {
               id="nalog"
               name="nalog"
               value={formData.nalog}
-              onChange={handleInputChange}
+              readOnly
+              className="bg-gray-100"
             />
           </div>
           
@@ -191,8 +190,8 @@ const WorkOrderDetail = () => {
               id="vrsta"
               name="vrsta"
               value={formData.vrsta}
-              onChange={handleInputChange}
               readOnly
+              className="bg-gray-100"
             />
           </div>
           
@@ -202,7 +201,8 @@ const WorkOrderDetail = () => {
               id="korisnik"
               name="korisnik"
               value={formData.korisnik}
-              onChange={handleInputChange}
+              readOnly
+              className="bg-gray-100"
             />
           </div>
           
@@ -212,7 +212,8 @@ const WorkOrderDetail = () => {
               id="kontakt"
               name="kontakt"
               value={formData.kontakt}
-              onChange={handleInputChange}
+              readOnly
+              className="bg-gray-100"
             />
           </div>
           
@@ -222,8 +223,8 @@ const WorkOrderDetail = () => {
               id="opis"
               name="opis"
               value={formData.opis}
-              onChange={handleInputChange}
-              className="min-h-[100px]"
+              readOnly
+              className="min-h-[100px] bg-gray-100"
             />
           </div>
         </div>
