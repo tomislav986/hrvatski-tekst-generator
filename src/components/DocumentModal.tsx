@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Save, Plus, Eye } from "lucide-react";
+import { Save, Plus, Eye, Camera } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
@@ -80,6 +80,11 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
     // Implement document viewing functionality here
   };
 
+  const handleCapturePhoto = (id: string) => {
+    console.log("Fotografiranje dokumenta:", id);
+    // Implement photo capture functionality here
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[800px] bg-gray-50 border-gray-200 shadow-sm flex flex-col max-h-[90vh]">
@@ -125,23 +130,43 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
                     </div>
                     
                     <div className="flex flex-col space-y-2 pt-2">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              className="justify-start"
-                              onClick={() => handleViewDocument(doc.id)}
-                            >
-                              <Eye className="h-4 w-4 text-gray-500 mr-2" />
-                              <span className="text-gray-600">Pregledaj</span>
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Pregled dokumenta</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+                      <div className="flex space-x-2">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                className="justify-start"
+                                onClick={() => handleViewDocument(doc.id)}
+                              >
+                                <Eye className="h-4 w-4 text-gray-500 mr-2" />
+                                <span className="text-gray-600">Pregledaj</span>
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Pregled dokumenta</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                        
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                className="justify-start"
+                                onClick={() => handleCapturePhoto(doc.id)}
+                              >
+                                <Camera className="h-4 w-4 text-gray-500 mr-2" />
+                                <span className="text-gray-600">Fotografiraj</span>
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Fotografiraj dokument</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -201,6 +226,23 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
                               </TooltipTrigger>
                               <TooltipContent>
                                 <p>Pregled dokumenta</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  className="p-2 h-auto"
+                                  onClick={() => handleCapturePhoto(doc.id)}
+                                >
+                                  <Camera className="h-4 w-4 text-gray-500" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Fotografiraj dokument</p>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
