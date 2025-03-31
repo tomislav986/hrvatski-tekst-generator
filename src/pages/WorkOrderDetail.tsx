@@ -19,9 +19,6 @@ interface LocationState {
   orderType?: string;
 }
 
-// Define possible work order statuses
-type WorkOrderStatus = "Aktivno" | "Na čekanju" | "Za odraditi";
-
 const WorkOrderDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -45,21 +42,10 @@ const WorkOrderDetail = () => {
     stari_vodomjer_stanje: "",
     novi_vodomjer_serijski: "",
     novi_vodomjer_stanje: "",
-    vrsta: orderType || "",
-    status: "Aktivno" as WorkOrderStatus  // Default status
+    vrsta: orderType || ""
   });
 
   const isWaterMeterOrder = formData.vrsta.includes("475-RN Vodomjeri");
-
-  // Get button text based on status
-  const getStatusToggleButtonText = () => {
-    if (formData.status === "Aktivno") {
-      return "Stavi na čekanje";
-    } else if (formData.status === "Na čekanju" || formData.status === "Za odraditi") {
-      return "Aktiviraj";
-    }
-    return "Stavi na čekanje"; // Default fallback
-  };
 
   const [items, setItems] = useState<WorkOrderItem[]>([
     { 
@@ -120,8 +106,7 @@ const WorkOrderDetail = () => {
         vrsta: "410-RN KW",
         nalog: "2025-410-23",
         korisnik: "Marko Marković, Tina Ujevića 25",
-        kontakt: "099 123 45 67",
-        status: "Aktivno"
+        kontakt: "099 123 45 67"
       }));
     } 
     else if (id === "2") {
@@ -130,8 +115,7 @@ const WorkOrderDetail = () => {
         vrsta: "440-RN Vozila",
         nalog: "2025-440-35",
         korisnik: "Tim d.o.o., Zavojna 2b",
-        kontakt: "098 321 54 98",
-        status: "Na čekanju"
+        kontakt: "098 321 54 98"
       }));
     }
     else if (id === "3") {
@@ -140,8 +124,7 @@ const WorkOrderDetail = () => {
         vrsta: "475-RN Vodomjeri",
         nalog: "2025-475-12",
         korisnik: "Tomislav Horvat, Uska 46",
-        kontakt: "098 111 22 33, tom@hh.hr",
-        status: "Za odraditi"
+        kontakt: "098 111 22 33, tom@hh.hr"
       }));
     }
     else if (id === "4") {
@@ -150,15 +133,13 @@ const WorkOrderDetail = () => {
         vrsta: "475-RN Vodomjeri",
         nalog: "2025-475-13",
         korisnik: "Ivan Viljak, Varaždinska 55",
-        kontakt: "0991234564",
-        status: "Aktivno"
+        kontakt: "0991234564"
       }));
     }
     else if (orderType) {
       setFormData(prev => ({
         ...prev,
-        vrsta: orderType,
-        status: "Aktivno"
+        vrsta: orderType
       }));
     }
   }, [id, orderType]);
@@ -202,15 +183,8 @@ const WorkOrderDetail = () => {
   };
 
   const handlePutOnHold = () => {
-    const newStatus = formData.status === "Aktivno" ? "Na čekanju" : "Aktivno";
-    
-    setFormData(prev => ({
-      ...prev,
-      status: newStatus as WorkOrderStatus
-    }));
-    
-    const actionText = newStatus === "Aktivno" ? "aktiviran" : "stavljen na čekanje";
-    toast(`Radni nalog ${actionText}`);
+    toast("Radni nalog stavljen na čekanje");
+    navigate("/work-orders");
   };
 
   const handleDocuments = () => {
@@ -554,7 +528,7 @@ const WorkOrderDetail = () => {
           variant="outline" 
           className="border-gray-300"
         >
-          {getStatusToggleButtonText()}
+          Stavi na čekanje
         </Button>
         
         <Button 
