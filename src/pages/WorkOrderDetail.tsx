@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -29,11 +28,11 @@ const WorkOrderDetail = () => {
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
   const [isNewItemModalOpen, setIsNewItemModalOpen] = useState(false);
-  const [isWaterMeterSectionOpen, setIsWaterMeterSectionOpen] = useState(true);
+  const [isWaterMeterSectionOpen, setIsWaterMeterSectionOpen] = useState(false);
   const [isWaterMeterDetailsModalOpen, setIsWaterMeterDetailsModalOpen] = useState(false);
   const [currentWaterMeterType, setCurrentWaterMeterType] = useState<string>("");
   const [waterMeterDetails, setWaterMeterDetails] = useState<string>("");
-  
+
   const [formData, setFormData] = useState({
     nalog: "",
     korisnik: "",
