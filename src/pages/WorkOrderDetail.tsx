@@ -45,7 +45,7 @@ const WorkOrderDetail = () => {
     vrsta: orderType || ""
   });
 
-  const isWaterMeterOrder = formData.vrsta === "475-RN Vodomjeri";
+  const isWaterMeterOrder = formData.vrsta.includes("475-RN Vodomjeri");
 
   const [items, setItems] = useState<WorkOrderItem[]>([
     { 
@@ -132,16 +132,25 @@ const WorkOrderDetail = () => {
         korisnik: "Tomislav Horvat, Uska 46",
         kontakt: "098 111 22 33, tom@hh.hr"
       }));
-      setIsWaterMeterSectionOpen(true);
-    } 
+    }
+    else if (id === "4") {
+      setFormData(prev => ({
+        ...prev,
+        vrsta: "475-RN Vodomjeri",
+        nalog: "2025-475-13",
+        korisnik: "Ivan Viljak, Varaždinska 55",
+        kontakt: "0991234564"
+      }));
+    }
     else if (orderType) {
       setFormData(prev => ({
         ...prev,
         vrsta: orderType
       }));
-      if (orderType === "475-RN Vodomjeri") {
-        setIsWaterMeterSectionOpen(true);
-      }
+    }
+
+    if (orderType?.includes("475-RN Vodomjeri") || id === "3" || id === "4") {
+      setIsWaterMeterSectionOpen(true);
     }
   }, [id, orderType]);
 
