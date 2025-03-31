@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import DocumentModal from "@/components/DocumentModal";
 import SignatureModal from "@/components/SignatureModal";
 import NewItemModal from "@/components/NewItemModal";
+import WaterMeterDetailsModal from "@/components/WaterMeterDetailsModal";
 import { WorkOrderItem } from "@/components/NewItemModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -28,6 +30,9 @@ const WorkOrderDetail = () => {
   const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
   const [isNewItemModalOpen, setIsNewItemModalOpen] = useState(false);
   const [isWaterMeterSectionOpen, setIsWaterMeterSectionOpen] = useState(true);
+  const [isWaterMeterDetailsModalOpen, setIsWaterMeterDetailsModalOpen] = useState(false);
+  const [currentWaterMeterType, setCurrentWaterMeterType] = useState<string>("");
+  const [waterMeterDetails, setWaterMeterDetails] = useState<string>("");
   
   const [formData, setFormData] = useState({
     nalog: "",
@@ -183,9 +188,21 @@ const WorkOrderDetail = () => {
   };
 
   const handleShowDetails = (type: string) => {
-    toast.info(`Detalji o ${type} vodomjeru`, {
-      description: `Prikazuju se dodatni detalji o ${type} vodomjeru`
-    });
+    let details = "";
+    if (type === "starog") {
+      details = formData.stari_vodomjer_serijski 
+        ? `Serijski broj: ${formData.stari_vodomjer_serijski}\nProizvođač: Siemens\nModel: WM600\nGodina proizvodnje: 2018\nKlasa točnosti: C\nMaksimalni protok: 6 m³/h\nNominalni protok: 2.5 m³/h\nMinimalni protok: 0.05 m³/h\nMaksimalna temperatura: 30°C\nMaksimalni tlak: 16 bar\nPromjer: DN20`
+        : "Nisu dostupni podaci o vodomjeru";
+      setCurrentWaterMeterType("starog");
+    } else {
+      details = formData.novi_vodomjer_serijski 
+        ? `Serijski broj: ${formData.novi_vodomjer_serijski}\nProizvođač: Sensus\nModel: iPERL\nGodina proizvodnje: 2022\nKlasa točnosti: R800\nMaksimalni protok: 6.3 m³/h\nNominalni protok: 2.5 m³/h\nMinimalni protok: 0.003 m³/h\nMaksimalna temperatura: 50°C\nMaksimalni tlak: 16 bar\nPromjer: DN15`
+        : "Nisu dostupni podaci o vodomjeru";
+      setCurrentWaterMeterType("novog");
+    }
+    
+    setWaterMeterDetails(details);
+    setIsWaterMeterDetailsModalOpen(true);
   };
 
   const handleScanBarcode = (type: string) => {
@@ -534,6 +551,13 @@ const WorkOrderDetail = () => {
         open={isNewItemModalOpen}
         onOpenChange={setIsNewItemModalOpen}
         onAddItem={addNewItem}
+      />
+
+      <WaterMeterDetailsModal
+        open={isWaterMeterDetailsModalOpen}
+        onOpenChange={setIsWaterMeterDetailsModalOpen}
+        meterType={currentWaterMeterType}
+        details={waterMeterDetails}
       />
     </div>
   );
