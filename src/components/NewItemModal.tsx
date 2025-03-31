@@ -6,7 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-  DialogClose
+  DialogClose,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -72,9 +73,12 @@ const NewItemModal = ({ open, onOpenChange, onAddItem }: NewItemModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-[475px]">
         <DialogHeader>
           <DialogTitle>Nova stavka</DialogTitle>
+          <DialogDescription>
+            Dodaj novu stavku u radni nalog
+          </DialogDescription>
         </DialogHeader>
         
         <div className="grid gap-4 py-4">
