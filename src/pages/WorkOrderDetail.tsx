@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Check, X, Trash, Info, ChevronDown, ChevronUp, Barcode } from "lucide-react";
+import { Check, X, Trash, Info, ChevronDown, ChevronUp, Barcode, Droplet } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import DocumentModal from "@/components/DocumentModal";
@@ -97,6 +97,12 @@ const WorkOrderDetail = () => {
   };
 
   useEffect(() => {
+    if (isWaterMeterOrder) {
+      setIsWaterMeterSectionOpen(true);
+    }
+  }, [isWaterMeterOrder]);
+
+  useEffect(() => {
     console.log("Loading work order details for ID:", id);
     console.log("Order type:", orderType);
     
@@ -126,12 +132,16 @@ const WorkOrderDetail = () => {
         korisnik: "Tomislav Horvat, Uska 46",
         kontakt: "098 111 22 33, tom@hh.hr"
       }));
+      setIsWaterMeterSectionOpen(true);
     } 
     else if (orderType) {
       setFormData(prev => ({
         ...prev,
         vrsta: orderType
       }));
+      if (orderType === "475-RN Vodomjeri") {
+        setIsWaterMeterSectionOpen(true);
+      }
     }
   }, [id, orderType]);
 
@@ -289,7 +299,10 @@ const WorkOrderDetail = () => {
               className="border rounded-md p-4"
             >
               <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-medium">Podaci o vodomjerima</h3>
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <Droplet className="h-5 w-5 text-blue-500" />
+                  Podaci o vodomjerima
+                </h3>
                 <CollapsibleTrigger asChild>
                   <Button variant="ghost" size="sm" onClick={toggleWaterMeterSection} className="p-1">
                     {isWaterMeterSectionOpen ? (
