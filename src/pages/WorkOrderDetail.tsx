@@ -544,13 +544,15 @@ const WorkOrderDetail = () => {
       </div>
       
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Button 
-          onClick={handleFinishOrder}
-          variant="outline" 
-          className="border-gray-300"
-        >
-          Završi radni nalog
-        </Button>
+        {formData.status !== "Završeno" && (
+          <Button 
+            onClick={handleFinishOrder}
+            variant="outline" 
+            className="border-gray-300"
+          >
+            Završi radni nalog
+          </Button>
+        )}
         
         <Button 
           onClick={handlePutOnHold}
@@ -604,4 +606,3 @@ const WorkOrderDetail = () => {
 };
 
 export default WorkOrderDetail;
-
