@@ -17,9 +17,15 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, Trash, Save, Plus, FilePlus, Eye } from "lucide-react";
+import { Save, Plus, Eye } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { 
+  Tooltip,
+  TooltipContent, 
+  TooltipProvider, 
+  TooltipTrigger 
+} from "@/components/ui/tooltip";
 
 interface Document {
   id: string;
@@ -67,11 +73,6 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
 
   const handleDelete = () => {
     setDocuments([{ id: "1", naziv: "", opis: "", napomena: "" }]);
-  };
-
-  const handleTakePicture = () => {
-    console.log("Slikanje dokumenta");
-    // Implement camera functionality here
   };
 
   const handleViewDocument = (id: string) => {
@@ -124,41 +125,23 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
                     </div>
                     
                     <div className="flex flex-col space-y-2 pt-2">
-                      <Button
-                        variant="ghost"
-                        className="justify-start"
-                        onClick={handleTakePicture}
-                      >
-                        <Camera className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-gray-600">Slikaj</span>
-                      </Button>
-                      
-                      <Button
-                        variant="ghost"
-                        className="justify-start"
-                        onClick={() => console.log("Dodaj dokument za", doc.id)}
-                      >
-                        <FilePlus className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-gray-600">Dodaj dokument</span>
-                      </Button>
-                      
-                      <Button
-                        variant="ghost"
-                        className="justify-start"
-                        onClick={() => handleViewDocument(doc.id)}
-                      >
-                        <Eye className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-gray-600">Pregledaj</span>
-                      </Button>
-                      
-                      <Button
-                        variant="ghost"
-                        className="justify-start"
-                        onClick={() => handleDeleteDocument(doc.id)}
-                      >
-                        <Trash className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-gray-600">Obriši</span>
-                      </Button>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              className="justify-start"
+                              onClick={() => handleViewDocument(doc.id)}
+                            >
+                              <Eye className="h-4 w-4 text-gray-500 mr-2" />
+                              <span className="text-gray-600">Pregledaj</span>
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Pregled dokumenta</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
                   </div>
                 </div>
@@ -205,34 +188,22 @@ const DocumentModal = ({ open, onOpenChange }: DocumentModalProps) => {
                       </TableCell>
                       <TableCell className="py-2">
                         <div className="flex space-x-1">
-                          <Button
-                            variant="ghost"
-                            className="p-2 h-auto"
-                            onClick={handleTakePicture}
-                          >
-                            <Camera className="h-4 w-4 text-gray-500" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            className="p-2 h-auto"
-                            onClick={() => console.log("Dodaj dokument za", doc.id)}
-                          >
-                            <FilePlus className="h-4 w-4 text-gray-500" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            className="p-2 h-auto"
-                            onClick={() => handleViewDocument(doc.id)}
-                          >
-                            <Eye className="h-4 w-4 text-gray-500" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            className="p-2 h-auto"
-                            onClick={() => handleDeleteDocument(doc.id)}
-                          >
-                            <Trash className="h-4 w-4 text-gray-500" />
-                          </Button>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  className="p-2 h-auto"
+                                  onClick={() => handleViewDocument(doc.id)}
+                                >
+                                  <Eye className="h-4 w-4 text-gray-500" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Pregled dokumenta</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         </div>
                       </TableCell>
                     </TableRow>
