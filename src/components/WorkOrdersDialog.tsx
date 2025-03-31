@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -48,7 +47,6 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
   const isMobile = useIsMobile();
   const isSmallMobile = useIsSmallMobile();
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string | null>("Status");
   const [filterType, setFilterType] = useState<string | null>(null);
   
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([
@@ -119,10 +117,6 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
     ));
   };
 
-  const handleRemoveStatusFilter = () => {
-    setStatusFilter(null);
-  };
-
   const handleRemoveFilterType = () => {
     setFilterType(null);
   };
@@ -180,15 +174,6 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              
-              {statusFilter && (
-                <div className="flex items-center bg-gray-200 rounded-md px-3 py-1">
-                  <span className="text-sm mr-2">{statusFilter}</span>
-                  <button onClick={handleRemoveStatusFilter}>
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              )}
               
               {filterType && (
                 <div className="flex items-center bg-gray-200 rounded-md px-3 py-1">

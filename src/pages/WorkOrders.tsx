@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +28,6 @@ const WorkOrders = () => {
   const isMobile = useIsMobile();
   const isSmallMobile = useIsSmallMobile();
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string | null>("Status");
   const [filterType, setFilterType] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
@@ -88,10 +86,6 @@ const WorkOrders = () => {
     setWorkOrders(workOrders.map(order => 
       order.id === id ? { ...order, selected: checked } : order
     ));
-  };
-
-  const handleRemoveStatusFilter = () => {
-    setStatusFilter(null);
   };
 
   const handleRemoveFilterType = () => {
@@ -189,15 +183,6 @@ const WorkOrders = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          
-          {statusFilter && (
-            <div className="flex items-center bg-gray-200 rounded-md px-3 py-1">
-              <span className="text-sm mr-2">{statusFilter}</span>
-              <button onClick={handleRemoveStatusFilter}>
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-          )}
           
           {filterType && (
             <div className="flex items-center bg-gray-200 rounded-md px-3 py-1">
