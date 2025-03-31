@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Check, X, Trash, Info, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, X, Trash, Info, ChevronDown, ChevronUp, Barcode } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import DocumentModal from "@/components/DocumentModal";
@@ -80,7 +79,6 @@ const WorkOrderDetail = () => {
     }
   ]);
 
-  // Get row background color based on quantities
   const getRowBackgroundColor = (plan: number | string, executed: number | string) => {
     const planNum = Number(plan);
     const executedNum = Number(executed);
@@ -184,9 +182,15 @@ const WorkOrderDetail = () => {
     setIsSignatureModalOpen(true);
   };
 
-  const handleShowDetails = () => {
-    toast.info("Detalji o starom vodomjeru", {
-      description: "Prikazuju se dodatni detalji o starom vodomjeru"
+  const handleShowDetails = (type: string) => {
+    toast.info(`Detalji o ${type} vodomjeru`, {
+      description: `Prikazuju se dodatni detalji o ${type} vodomjeru`
+    });
+  };
+
+  const handleScanBarcode = (type: string) => {
+    toast.info(`Skeniranje barkoda`, {
+      description: `Skeniranje barkoda za ${type} vodomjer`
     });
   };
 
@@ -301,14 +305,32 @@ const WorkOrderDetail = () => {
                             type="button" 
                             variant="ghost" 
                             size="icon" 
-                            onClick={handleShowDetails}
-                            className="ml-2"
+                            onClick={() => handleShowDetails('starog')}
+                            className="ml-1"
                           >
                             <Info className="h-5 w-5" />
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent>
                           <p>Prikaži detalje o vodomjeru</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => handleScanBarcode('starog')}
+                            className="ml-1"
+                          >
+                            <Barcode className="h-5 w-5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Skeniraj barkod</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -327,12 +349,51 @@ const WorkOrderDetail = () => {
                 
                 <div>
                   <label htmlFor="novi_vodomjer_serijski" className="block text-sm font-medium mb-1">Serijski broj novog vodomjera:</label>
-                  <Input 
-                    id="novi_vodomjer_serijski"
-                    name="novi_vodomjer_serijski"
-                    value={formData.novi_vodomjer_serijski}
-                    onChange={handleInputChange}
-                  />
+                  <div className="flex items-center">
+                    <Input 
+                      id="novi_vodomjer_serijski"
+                      name="novi_vodomjer_serijski"
+                      value={formData.novi_vodomjer_serijski}
+                      onChange={handleInputChange}
+                      className="flex-1"
+                    />
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => handleShowDetails('novog')}
+                            className="ml-1"
+                          >
+                            <Info className="h-5 w-5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Prikaži detalje o vodomjeru</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => handleScanBarcode('novog')}
+                            className="ml-1"
+                          >
+                            <Barcode className="h-5 w-5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Skeniraj barkod</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                 </div>
                 
                 <div>
