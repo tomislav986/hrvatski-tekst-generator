@@ -55,7 +55,6 @@ const NewItemModal = ({ open, onOpenChange, onAddItem }: NewItemModalProps) => {
     // Add a default ID (would normally be handled by backend)
     const newItem = { 
       ...formData,
-      izvrsena_kolicina: "",
       status: "Pending",
       amount: ""
     };
@@ -78,7 +77,7 @@ const NewItemModal = ({ open, onOpenChange, onAddItem }: NewItemModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[475px]">
+      <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
           <DialogTitle>Nova stavka</DialogTitle>
           <DialogDescription>
@@ -152,6 +151,20 @@ const NewItemModal = ({ open, onOpenChange, onAddItem }: NewItemModalProps) => {
               name="kolicina_plan"
               type="number"
               value={formData.kolicina_plan}
+              onChange={handleChange}
+              className="col-span-3"
+            />
+          </div>
+          
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="izvrsena_kolicina" className="text-right">
+              Izvršena količina
+            </Label>
+            <Input
+              id="izvrsena_kolicina"
+              name="izvrsena_kolicina"
+              type="number"
+              value={formData.izvrsena_kolicina}
               onChange={handleChange}
               className="col-span-3"
             />
