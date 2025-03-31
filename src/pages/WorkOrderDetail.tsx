@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -149,9 +150,8 @@ const WorkOrderDetail = () => {
       }));
     }
 
-    if (orderType?.includes("475-RN Vodomjeri") || id === "3" || id === "4") {
-      setIsWaterMeterSectionOpen(true);
-    }
+    // Don't automatically open the water meter section
+    // We want it collapsed by default as per the new requirement
   }, [id, orderType]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
