@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -132,10 +131,9 @@ const WorkOrders = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white w-full">
-      {/* Header section with filters and actions */}
       <div className={`flex ${isMobile ? 'flex-col pt-4' : 'flex-row'} justify-between p-2 sm:p-4 gap-2 border-b`}>
         <div className={`flex ${isSmallMobile ? 'flex-col w-full' : 'flex-row'} gap-2 w-full sm:w-auto`}>
-          <div className="relative w-full sm:w-auto">
+          <div className="relative w-full sm:w-auto mt-4 sm:mt-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full sm:w-32 flex justify-between">
@@ -205,7 +203,6 @@ const WorkOrders = () => {
         </Button>
       </div>
       
-      {/* Table section */}
       <div className="overflow-auto flex-grow">
         <div className="w-full">
           <Table>
@@ -299,7 +296,6 @@ const WorkOrders = () => {
         </div>
       </div>
       
-      {/* Pagination section */}
       <div className="border-t p-2 sm:p-4 flex flex-col sm:flex-row justify-between items-center">
         <div className="mb-2 sm:mb-0 text-sm w-full sm:w-auto flex justify-between sm:justify-start items-center">
           <span>Naloga po stranici:</span>

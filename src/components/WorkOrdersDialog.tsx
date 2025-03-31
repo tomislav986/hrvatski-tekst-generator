@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -136,7 +137,8 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
         <div className="flex flex-col h-[80vh]">
           <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} justify-between p-2 sm:p-4 gap-2 border-b`}>
             <div className={`flex ${isSmallMobile ? 'flex-col' : 'flex-row'} gap-2`}>
-              <div className="relative">
+              {/* Added mt-8 for mobile to push the "Akcija" button down */}
+              <div className="relative mt-4 sm:mt-0">
                 <Button variant="outline" className="w-full sm:w-32 flex justify-between">
                   Akcija
                   <ChevronDown className="h-4 w-4" />
