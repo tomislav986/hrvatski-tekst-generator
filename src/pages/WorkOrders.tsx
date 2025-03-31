@@ -133,7 +133,7 @@ const WorkOrders = () => {
     <div className="min-h-screen flex flex-col bg-white w-full">
       <div className={`flex ${isMobile ? 'flex-col pt-4' : 'flex-row'} justify-between p-2 sm:p-4 gap-2 border-b`}>
         <div className={`flex ${isSmallMobile ? 'flex-col w-full' : 'flex-row'} gap-2 w-full sm:w-auto`}>
-          <div className="relative w-full sm:w-auto mt-8 sm:mt-0">
+          <div className="relative w-full sm:w-auto mt-16 sm:mt-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full sm:w-32 flex justify-between">
