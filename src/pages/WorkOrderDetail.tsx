@@ -19,6 +19,9 @@ interface LocationState {
   orderType?: string;
 }
 
+// Define possible work order statuses
+type WorkOrderStatus = "Aktivno" | "Na čekanju" | "Za odraditi";
+
 const WorkOrderDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -42,10 +45,20 @@ const WorkOrderDetail = () => {
     stari_vodomjer_stanje: "",
     novi_vodomjer_serijski: "",
     novi_vodomjer_stanje: "",
-    vrsta: orderType || ""
+    vrsta: orderType || "",
+    status: "Aktivno" as WorkOrderStatus  // Default status
   });
 
   const isWaterMeterOrder = formData.vrsta.includes("475-RN Vodomjeri");
+
+  // Get button text based on status
+  const getStatusToggleButtonText = () => {
+    if (formData.status === "Aktivno") {
+      return "Stavi na čekanje";
+    } else {
+      return "Aktiviraj";
+    }
+  };
 
   const [items, setItems] = useState<WorkOrderItem[]>([
     { 
@@ -106,7 +119,8 @@ const WorkOrderDetail = () => {
         vrsta: "410-RN KW",
         nalog: "2025-410-23",
         korisnik: "Marko Marković, Tina Ujevića 25",
-        kontakt: "099 123 45 67"
+        kontakt: "099 123 45 67",
+        status: "Aktivno"
       }));
     } 
     else if (id === "2") {
@@ -115,7 +129,8 @@ const WorkOrderDetail = () => {
         vrsta: "440-RN Vozila",
         nalog: "2025-440-35",
         korisnik: "Tim d.o.o., Zavojna 2b",
-        kontakt: "098 321 54 98"
+        kontakt: "098 321 54 98",
+        status: "Na čekanju"
       }));
     }
     else if (id === "3") {
@@ -124,7 +139,8 @@ const WorkOrderDetail = () => {
         vrsta: "475-RN Vodomjeri",
         nalog: "2025-475-12",
         korisnik: "Tomislav Horvat, Uska 46",
-        kontakt: "098 111 22 33, tom@hh.hr"
+        kontakt: "098 111 22 33, tom@hh.hr",
+        status: "Za odraditi"
       }));
     }
     else if (id === "4") {
@@ -133,13 +149,15 @@ const WorkOrderDetail = () => {
         vrsta: "475-RN Vodomjeri",
         nalog: "2025-475-13",
         korisnik: "Ivan Viljak, Varaždinska 55",
-        kontakt: "0991234564"
+        kontakt: "0991234564",
+        status: "Aktivno"
       }));
     }
     else if (orderType) {
       setFormData(prev => ({
         ...prev,
-        vrsta: orderType
+        vrsta: orderType,
+        status: "Aktivno"
       }));
     }
   }, [id, orderType]);
@@ -183,8 +201,14 @@ const WorkOrderDetail = () => {
   };
 
   const handlePutOnHold = () => {
-    toast("Radni nalog stavljen na čekanje");
-    navigate("/work-orders");
+    const newStatus = formData.status === "Aktivno" ? "Na čekanju" : "Aktivno";
+    
+    setFormData(prev => ({
+      ...prev,
+      status: newStatus as WorkOrderStatus
+    }));
+    
+    toast(`Radni nalog ${newStatus === "Aktivno" ? "aktiviran" : "stavljen na čekanje"}`);
   };
 
   const handleDocuments = () => {
@@ -528,7 +552,7 @@ const WorkOrderDetail = () => {
           variant="outline" 
           className="border-gray-300"
         >
-          Stavi na čekanje
+          {getStatusToggleButtonText()}
         </Button>
         
         <Button 
