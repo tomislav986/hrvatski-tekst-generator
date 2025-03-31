@@ -55,9 +55,10 @@ const WorkOrderDetail = () => {
   const getStatusToggleButtonText = () => {
     if (formData.status === "Aktivno") {
       return "Stavi na čekanje";
-    } else {
+    } else if (formData.status === "Na čekanju" || formData.status === "Za odraditi") {
       return "Aktiviraj";
     }
+    return "Stavi na čekanje"; // Default fallback
   };
 
   const [items, setItems] = useState<WorkOrderItem[]>([
@@ -208,7 +209,8 @@ const WorkOrderDetail = () => {
       status: newStatus as WorkOrderStatus
     }));
     
-    toast(`Radni nalog ${newStatus === "Aktivno" ? "aktiviran" : "stavljen na čekanje"}`);
+    const actionText = newStatus === "Aktivno" ? "aktiviran" : "stavljen na čekanje";
+    toast(`Radni nalog ${actionText}`);
   };
 
   const handleDocuments = () => {
