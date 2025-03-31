@@ -25,7 +25,6 @@ const App = () => {
             <div className="flex min-h-screen w-full">
               {/* Only show sidebar on specific routes */}
               <Routes>
-                <Route path="/" element={null} />
                 <Route path="/login" element={null} />
                 <Route path="*" element={<MainSidebar />} />
               </Routes>
