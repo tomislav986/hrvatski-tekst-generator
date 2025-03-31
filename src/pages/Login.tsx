@@ -15,8 +15,8 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Navigate to the index page instead of work-orders
-    navigate("/");
+    // Navigate to the index page
+    navigate("/index");
   };
 
   return (
