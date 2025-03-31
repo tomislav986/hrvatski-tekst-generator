@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Check, X, Trash } from "lucide-react";
+import { Check, X, Trash, Info } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import DocumentModal from "@/components/DocumentModal";
 import SignatureModal from "@/components/SignatureModal";
 import NewItemModal from "@/components/NewItemModal";
 import { WorkOrderItem } from "@/components/NewItemModal";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface LocationState {
   orderType?: string;
@@ -32,7 +33,7 @@ const WorkOrderDetail = () => {
     korisnik: "",
     kontakt: "",
     opis: "Detaljan opis radova na nalogu",
-    stari_vodomjer_podaci: "",
+    stari_vodomjer_serijski: "",
     stari_vodomjer_stanje: "",
     novi_vodomjer_serijski: "",
     novi_vodomjer_stanje: "",
@@ -181,6 +182,12 @@ const WorkOrderDetail = () => {
     setIsSignatureModalOpen(true);
   };
 
+  const handleShowDetails = () => {
+    toast.info("Detalji o starom vodomjeru", {
+      description: "Prikazuju se dodatni detalji o starom vodomjeru"
+    });
+  };
+
   return (
     <div className="container mx-auto p-4 max-w-7xl">
       <h1 className="text-2xl font-bold mb-6">Podaci o radnom nalogu</h1>
@@ -252,14 +259,36 @@ const WorkOrderDetail = () => {
           {isWaterMeterOrder && (
             <>
               <div>
-                <label htmlFor="stari_vodomjer_podaci" className="block text-sm font-medium mb-1">Podaci o starom vodomjeru:</label>
-                <Textarea
-                  id="stari_vodomjer_podaci"
-                  name="stari_vodomjer_podaci"
-                  value={formData.stari_vodomjer_podaci}
-                  onChange={handleInputChange}
-                  className="min-h-[130px]"
-                />
+                <label htmlFor="stari_vodomjer_serijski" className="block text-sm font-medium mb-1">
+                  Serijski broj starog vodomjera:
+                </label>
+                <div className="flex items-center">
+                  <Input
+                    id="stari_vodomjer_serijski"
+                    name="stari_vodomjer_serijski"
+                    value={formData.stari_vodomjer_serijski}
+                    onChange={handleInputChange}
+                    className="flex-1"
+                  />
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          type="button" 
+                          variant="ghost" 
+                          size="icon" 
+                          onClick={handleShowDetails}
+                          className="ml-2"
+                        >
+                          <Info className="h-5 w-5" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Prikaži detalje o vodomjeru</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
