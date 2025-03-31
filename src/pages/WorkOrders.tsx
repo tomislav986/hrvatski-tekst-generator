@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -125,7 +126,7 @@ const WorkOrders = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} justify-between p-2 sm:p-4 gap-2 border-b`}>
+      <div className={`flex ${isMobile ? 'flex-col pt-14' : 'flex-row'} justify-between p-2 sm:p-4 gap-2 border-b`}>
         <div className={`flex ${isSmallMobile ? 'flex-col' : 'flex-row'} gap-2`}>
           <div className="relative">
             <DropdownMenu>

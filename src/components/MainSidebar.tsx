@@ -19,15 +19,23 @@ const MainSidebar = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const { toggleSidebar } = useSidebar();
+  const [open, setOpen] = React.useState(false);
   
   const isActive = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    if (isMobile) {
+      setOpen(false);
+    }
+  };
+
   // If on mobile, render a hamburger menu that opens a sheet
   if (isMobile) {
     return (
-      <Sheet>
+      <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button
             variant="ghost"
@@ -44,7 +52,7 @@ const MainSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   isActive={isActive("/work-orders")}
-                  onClick={() => navigate("/work-orders")}
+                  onClick={() => handleNavigation("/work-orders")}
                 >
                   <ClipboardList />
                   <span>Radni nalozi</span>
@@ -65,7 +73,7 @@ const MainSidebar = () => {
           <SidebarMenuItem>
             <SidebarMenuButton 
               isActive={isActive("/work-orders")}
-              onClick={() => navigate("/work-orders")}
+              onClick={() => handleNavigation("/work-orders")}
             >
               <ClipboardList />
               <span>Radni nalozi</span>
