@@ -127,6 +127,27 @@ const WorkOrders = () => {
     toast(`${selectedOrders.length} nalog(a) označeno kao završeno.`);
   };
 
+  const handleToggleStatus = (id: string) => {
+    setWorkOrders(workOrders.map(order => {
+      if (order.id === id) {
+        let newStatus = order.status;
+        
+        if (order.status === "Aktivno") {
+          newStatus = "Na čekanju";
+        } else if (order.status === "Na čekanju" || order.status === "Za odraditi") {
+          newStatus = "Aktivno";
+        }
+        
+        return { ...order, status: newStatus };
+      }
+      return order;
+    }));
+    
+    const order = workOrders.find(o => o.id === id);
+    const actionText = order?.status === "Aktivno" ? "stavljen na čekanje" : "aktiviran";
+    toast(`Radni nalog ${actionText}`);
+  };
+
   const handleEditOrder = (id: string) => {
     navigate(`/work-orders/${id}`);
   };
@@ -241,7 +262,7 @@ const WorkOrders = () => {
                     <TableHead>Status</TableHead>
                   </>
                 )}
-                <TableHead className="w-12"></TableHead>
+                <TableHead className="w-12">Akcije</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -267,7 +288,8 @@ const WorkOrders = () => {
                         <span 
                           className={`px-2 py-1 rounded text-sm ${
                             order.status === "Za odraditi" ? "bg-yellow-100 text-yellow-800" : 
-                            order.status === "Aktivno" ? "bg-green-100 text-green-800" : 
+                            order.status === "Aktivno" ? "bg-green-100 text-green-800" :
+                            order.status === "Na čekanju" ? "bg-orange-100 text-orange-800" : 
                             "bg-gray-100 text-gray-800"
                           }`}
                         >
@@ -285,6 +307,14 @@ const WorkOrders = () => {
                         onClick={() => handleEditOrder(order.id!)}
                       >
                         <Edit className="h-4 w-4 text-gray-500" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs"
+                        onClick={() => handleToggleStatus(order.id!)}
+                      >
+                        {order.status === "Aktivno" ? "Na čekanje" : "Aktiviraj"}
                       </Button>
                     </div>
                   </TableCell>
