@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -93,6 +94,17 @@ const WorkOrdersDialog = ({ open, onOpenChange }: WorkOrdersDialogProps) => {
       planirani_datum: "...", 
       due_date: "...", 
       status: "Završeno",
+      selected: false
+    },
+    { 
+      id: "5", 
+      nalog: "IN/1004/23", 
+      vrsta: "475-RN Vodomjeri", 
+      korisnik: "Ivan Viljak, Varaždinska 55", 
+      kontakt: "0991234564", 
+      planirani_datum: "2025-04-15", 
+      due_date: "2025-04-20", 
+      status: "Na čekanju",
       selected: false
     },
   ]);

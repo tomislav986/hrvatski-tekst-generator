@@ -66,6 +66,17 @@ const WorkOrders = () => {
       due_date: "2022-02-24", 
       status: "Završeno",
       selected: false
+    },
+    { 
+      id: "4", 
+      nalog: "2025-475-13", 
+      vrsta: "475-RN Vodomjeri", 
+      korisnik: "Ivan Viljak, Varaždinska 55", 
+      kontakt: "0991234564", 
+      planirani_datum: "2025-04-15", 
+      due_date: "2025-04-20", 
+      status: "Na čekanju",
+      selected: false
     }
   ]);
 
