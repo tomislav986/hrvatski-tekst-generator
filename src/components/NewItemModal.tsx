@@ -97,7 +97,7 @@ const NewItemModal = ({ open, onOpenChange, onAddItem }: NewItemModalProps) => {
           
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="naziv" className="text-right">
-              Naziv operacije/materijala
+              Matrijal
             </Label>
             <Input
               id="naziv"
