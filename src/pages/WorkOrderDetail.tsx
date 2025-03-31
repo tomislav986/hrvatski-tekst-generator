@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Check, X, Trash, Info, ChevronDown, ChevronUp, Barcode, Droplet } from "lucide-react";
+import { Check, X, Info, ChevronDown, ChevronUp, Barcode, Droplet } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import DocumentModal from "@/components/DocumentModal";
@@ -488,7 +487,6 @@ const WorkOrderDetail = () => {
               {!isMobile && <TableHead>Djelatnik (opcionalno)</TableHead>}
               <TableHead>{isMobile ? "Plan" : "Količina (plan)"}</TableHead>
               <TableHead>{isMobile ? "Izvr." : "Izvršena količina"}</TableHead>
-              <TableHead className="w-10"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -526,16 +524,6 @@ const WorkOrderDetail = () => {
                   ) : (
                     <Input value={item.izvrsena_kolicina} readOnly />
                   )}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDeleteItem(item.id)}
-                    title="Izbriši stavku"
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
                 </TableCell>
               </TableRow>
             ))}
