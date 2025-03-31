@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,8 @@ const WorkOrderDetail = () => {
     stari_vodomjer_stanje: "",
     novi_vodomjer_serijski: "",
     novi_vodomjer_stanje: "",
-    vrsta: orderType || ""
+    vrsta: orderType || "",
+    status: ""
   });
 
   const isWaterMeterOrder = formData.vrsta.includes("475-RN Vodomjeri");
@@ -106,7 +108,8 @@ const WorkOrderDetail = () => {
         vrsta: "410-RN KW",
         nalog: "2025-410-23",
         korisnik: "Marko Marković, Tina Ujevića 25",
-        kontakt: "099 123 45 67"
+        kontakt: "099 123 45 67",
+        status: "Za odraditi"
       }));
     } 
     else if (id === "2") {
@@ -115,7 +118,8 @@ const WorkOrderDetail = () => {
         vrsta: "440-RN Vozila",
         nalog: "2025-440-35",
         korisnik: "Tim d.o.o., Zavojna 2b",
-        kontakt: "098 321 54 98"
+        kontakt: "098 321 54 98",
+        status: "Aktivno"
       }));
     }
     else if (id === "3") {
@@ -124,7 +128,8 @@ const WorkOrderDetail = () => {
         vrsta: "475-RN Vodomjeri",
         nalog: "2025-475-12",
         korisnik: "Tomislav Horvat, Uska 46",
-        kontakt: "098 111 22 33, tom@hh.hr"
+        kontakt: "098 111 22 33, tom@hh.hr",
+        status: "Završeno"
       }));
     }
     else if (id === "4") {
@@ -133,20 +138,22 @@ const WorkOrderDetail = () => {
         vrsta: "475-RN Vodomjeri",
         nalog: "2025-475-13",
         korisnik: "Ivan Viljak, Varaždinska 55",
-        kontakt: "0991234564"
+        kontakt: "0991234564",
+        status: "Na čekanju"
       }));
     }
     else if (orderType) {
       setFormData(prev => ({
         ...prev,
-        vrsta: orderType
+        vrsta: orderType,
+        status: "Za odraditi"
       }));
     }
   }, [id, orderType]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    if (!["nalog", "vrsta", "korisnik", "kontakt", "opis"].includes(name)) {
+    if (!["nalog", "vrsta", "korisnik", "kontakt", "opis", "status"].includes(name)) {
       setFormData({ ...formData, [name]: value });
     }
   };
@@ -183,8 +190,14 @@ const WorkOrderDetail = () => {
   };
 
   const handlePutOnHold = () => {
-    toast("Radni nalog stavljen na čekanje");
-    navigate("/work-orders");
+    const newStatus = formData.status === "Aktivno" ? "Na čekanju" : "Aktivno";
+    
+    setFormData(prev => ({
+      ...prev,
+      status: newStatus
+    }));
+    
+    toast(`Radni nalog ${newStatus === "Aktivno" ? "aktiviran" : "stavljen na čekanje"}`);
   };
 
   const handleDocuments = () => {
@@ -275,6 +288,22 @@ const WorkOrderDetail = () => {
               disabled
               className="bg-gray-100"
             />
+          </div>
+          
+          <div>
+            <label htmlFor="status" className="block text-sm font-medium mb-1">Status:</label>
+            <div className="flex items-center">
+              <span 
+                className={`px-3 py-1 rounded text-sm ${
+                  formData.status === "Za odraditi" ? "bg-yellow-100 text-yellow-800" : 
+                  formData.status === "Aktivno" ? "bg-green-100 text-green-800" : 
+                  formData.status === "Na čekanju" ? "bg-orange-100 text-orange-800" :
+                  "bg-gray-100 text-gray-800"
+                }`}
+              >
+                {formData.status}
+              </span>
+            </div>
           </div>
           
           <div>
@@ -528,7 +557,7 @@ const WorkOrderDetail = () => {
           variant="outline" 
           className="border-gray-300"
         >
-          Stavi na čekanje
+          {formData.status === "Aktivno" ? "Stavi na čekanje" : "Aktiviraj"}
         </Button>
         
         <Button 
@@ -575,3 +604,4 @@ const WorkOrderDetail = () => {
 };
 
 export default WorkOrderDetail;
+
