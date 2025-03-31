@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -130,10 +131,11 @@ const WorkOrders = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      <div className={`flex ${isMobile ? 'flex-col pt-14' : 'flex-row'} justify-between p-2 sm:p-4 gap-2 border-b`}>
-        <div className={`flex ${isSmallMobile ? 'flex-col' : 'flex-row'} gap-2`}>
-          <div className="relative">
+    <div className="min-h-screen flex flex-col bg-white w-full">
+      {/* Header section with filters and actions */}
+      <div className={`flex ${isMobile ? 'flex-col pt-4' : 'flex-row'} justify-between p-2 sm:p-4 gap-2 border-b`}>
+        <div className={`flex ${isSmallMobile ? 'flex-col w-full' : 'flex-row'} gap-2 w-full sm:w-auto`}>
+          <div className="relative w-full sm:w-auto">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full sm:w-32 flex justify-between">
@@ -156,7 +158,7 @@ const WorkOrders = () => {
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input 
               placeholder="Traži..." 
-              className="pl-9 w-full sm:w-64" 
+              className="pl-9 w-full" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -196,15 +198,16 @@ const WorkOrders = () => {
         
         <Button 
           variant="default" 
-          className="mt-2 sm:mt-0 bg-gray-800 hover:bg-gray-700"
+          className="mt-2 sm:mt-0 bg-gray-800 hover:bg-gray-700 w-full sm:w-auto"
           onClick={() => setIsModalOpen(true)}
         >
           Unos
         </Button>
       </div>
       
+      {/* Table section */}
       <div className="overflow-auto flex-grow">
-        <div className={isMobile ? "min-w-fit" : "min-w-[800px]"}>
+        <div className="w-full">
           <Table>
             <TableHeader className="bg-gray-100">
               <TableRow>
@@ -216,7 +219,7 @@ const WorkOrders = () => {
                   />
                 </TableHead>
                 <TableHead>Radni nalog</TableHead>
-                <TableHead>Vrsta radnog naloga</TableHead>
+                <TableHead>Vrsta</TableHead>
                 {!isMobile && (
                   <>
                     <TableHead>Korisnik i adresa</TableHead>
@@ -225,6 +228,9 @@ const WorkOrders = () => {
                     <TableHead>Due date</TableHead>
                     <TableHead>Status</TableHead>
                   </>
+                )}
+                {isMobile && (
+                  <TableHead>Status</TableHead>
                 )}
                 <TableHead className="w-12"></TableHead>
               </TableRow>
@@ -240,8 +246,8 @@ const WorkOrders = () => {
                       }
                     />
                   </TableCell>
-                  <TableCell>{order.nalog}</TableCell>
-                  <TableCell>{order.vrsta}</TableCell>
+                  <TableCell className="whitespace-nowrap">{order.nalog}</TableCell>
+                  <TableCell className="whitespace-nowrap">{order.vrsta.split('-')[0]}</TableCell>
                   {!isMobile && (
                     <>
                       <TableCell>{order.korisnik}</TableCell>
@@ -260,6 +266,19 @@ const WorkOrders = () => {
                         </span>
                       </TableCell>
                     </>
+                  )}
+                  {isMobile && (
+                    <TableCell>
+                      <span 
+                        className={`px-2 py-1 rounded text-sm ${
+                          order.status === "Za odraditi" ? "bg-yellow-100 text-yellow-800" : 
+                          order.status === "Aktivno" ? "bg-green-100 text-green-800" : 
+                          "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {order.status}
+                      </span>
+                    </TableCell>
                   )}
                   <TableCell>
                     <div className="flex space-x-1">
@@ -280,9 +299,10 @@ const WorkOrders = () => {
         </div>
       </div>
       
+      {/* Pagination section */}
       <div className="border-t p-2 sm:p-4 flex flex-col sm:flex-row justify-between items-center">
-        <div className="mb-2 sm:mb-0 text-sm">
-          Naloga po stranici: 
+        <div className="mb-2 sm:mb-0 text-sm w-full sm:w-auto flex justify-between sm:justify-start items-center">
+          <span>Naloga po stranici:</span>
           <Button variant="outline" className="ml-2 px-2">
             10 <ChevronDown className="h-4 w-4 ml-1" />
           </Button>
@@ -292,7 +312,7 @@ const WorkOrders = () => {
           1 - {workOrders.length} of {workOrders.length}
         </div>
         
-        <Pagination>
+        <Pagination className="w-full sm:w-auto flex justify-center">
           <PaginationContent>
             <PaginationItem>
               <PaginationLink>
