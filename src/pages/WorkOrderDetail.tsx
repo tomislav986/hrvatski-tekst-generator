@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Check, X, Trash, Info } from "lucide-react";
+import { Check, X, Trash, Info, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import DocumentModal from "@/components/DocumentModal";
@@ -13,6 +13,7 @@ import SignatureModal from "@/components/SignatureModal";
 import NewItemModal from "@/components/NewItemModal";
 import { WorkOrderItem } from "@/components/NewItemModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface LocationState {
   orderType?: string;
@@ -27,6 +28,7 @@ const WorkOrderDetail = () => {
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
   const [isNewItemModalOpen, setIsNewItemModalOpen] = useState(false);
+  const [isWaterMeterSectionOpen, setIsWaterMeterSectionOpen] = useState(true);
   
   const [formData, setFormData] = useState({
     nalog: "",
@@ -188,6 +190,10 @@ const WorkOrderDetail = () => {
     });
   };
 
+  const toggleWaterMeterSection = () => {
+    setIsWaterMeterSectionOpen(!isWaterMeterSectionOpen);
+  };
+
   return (
     <div className="container mx-auto p-4 max-w-7xl">
       <h1 className="text-2xl font-bold mb-6">Podaci o radnom nalogu</h1>
@@ -257,41 +263,58 @@ const WorkOrderDetail = () => {
         
         <div className="space-y-4">
           {isWaterMeterOrder && (
-            <>
-              <div>
-                <label htmlFor="stari_vodomjer_serijski" className="block text-sm font-medium mb-1">
-                  Serijski broj starog vodomjera:
-                </label>
-                <div className="flex items-center">
-                  <Input
-                    id="stari_vodomjer_serijski"
-                    name="stari_vodomjer_serijski"
-                    value={formData.stari_vodomjer_serijski}
-                    onChange={handleInputChange}
-                    className="flex-1"
-                  />
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          type="button" 
-                          variant="ghost" 
-                          size="icon" 
-                          onClick={handleShowDetails}
-                          className="ml-2"
-                        >
-                          <Info className="h-5 w-5" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Prikaži detalje o vodomjeru</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
+            <Collapsible
+              open={isWaterMeterSectionOpen}
+              onOpenChange={setIsWaterMeterSectionOpen}
+              className="border rounded-md p-4"
+            >
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-medium">Podaci o vodomjerima</h3>
+                <CollapsibleTrigger asChild>
+                  <Button variant="ghost" size="sm" onClick={toggleWaterMeterSection} className="p-1">
+                    {isWaterMeterSectionOpen ? (
+                      <ChevronUp className="h-5 w-5" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5" />
+                    )}
+                  </Button>
+                </CollapsibleTrigger>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CollapsibleContent className="space-y-4">
+                <div>
+                  <label htmlFor="stari_vodomjer_serijski" className="block text-sm font-medium mb-1">
+                    Serijski broj starog vodomjera:
+                  </label>
+                  <div className="flex items-center">
+                    <Input
+                      id="stari_vodomjer_serijski"
+                      name="stari_vodomjer_serijski"
+                      value={formData.stari_vodomjer_serijski}
+                      onChange={handleInputChange}
+                      className="flex-1"
+                    />
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={handleShowDetails}
+                            className="ml-2"
+                          >
+                            <Info className="h-5 w-5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Prikaži detalje o vodomjeru</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                </div>
+                
                 <div>
                   <label htmlFor="stari_vodomjer_stanje" className="block text-sm font-medium mb-1">Stanje starog vodomjera:</label>
                   <Input 
@@ -321,8 +344,8 @@ const WorkOrderDetail = () => {
                     onChange={handleInputChange}
                   />
                 </div>
-              </div>
-            </>
+              </CollapsibleContent>
+            </Collapsible>
           )}
           
           <div className={`flex ${isWaterMeterOrder ? 'md:items-end' : 'items-start'} ${isWaterMeterOrder ? 'md:mt-0' : 'mt-4'}`}>
@@ -387,7 +410,14 @@ const WorkOrderDetail = () => {
                   )}
                 </TableCell>
                 <TableCell>
-                
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleDeleteItem(item.id)}
+                    title="Izbriši stavku"
+                  >
+                    <Trash className="h-4 w-4" />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
