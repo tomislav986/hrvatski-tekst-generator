@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Search, ChevronDown, X, Edit, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Search, ChevronDown, X, Eye, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import {
   DropdownMenu,
@@ -121,7 +121,8 @@ const WorkOrders = () => {
     toast(`${selectedOrders.length} nalog(a) označeno kao završeno.`);
   };
 
-  const handleEditOrder = (id: string) => {
+  const handleViewOrder = (id: string) => {
+    console.log("Navigating to work order detail:", id);
     navigate(`/work-orders/${id}`);
   };
 
@@ -283,9 +284,9 @@ const WorkOrders = () => {
                         variant="ghost" 
                         size="icon" 
                         className="h-8 w-8"
-                        onClick={() => handleEditOrder(order.id!)}
+                        onClick={() => handleViewOrder(order.id!)}
                       >
-                        <Edit className="h-4 w-4 text-gray-500" />
+                        <Eye className="h-4 w-4 text-gray-500" />
                       </Button>
                     </div>
                   </TableCell>
