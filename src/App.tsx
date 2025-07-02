@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import WorkOrders from "./pages/WorkOrders";
 import WorkOrderDetail from "./pages/WorkOrderDetail";
 import RecyclingYard from "./pages/RecyclingYard";
+import RDPrvo from "./pages/RDPrvo";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => {
                   <Route path="/work-orders" element={<WorkOrders />} />
                   <Route path="/work-orders/:id" element={<WorkOrderDetail />} />
                   <Route path="/recycling-yard" element={<RecyclingYard />} />
+                  <Route path="/rd-prvo" element={<RDPrvo />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

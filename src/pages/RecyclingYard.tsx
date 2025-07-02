@@ -1,12 +1,19 @@
 
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const RecyclingYard = () => {
+  const navigate = useNavigate();
+
   const handleRDSelection = (rdName: string) => {
-    console.log(`Odabrano: ${rdName}`);
-    // Ovdje možete dodati logiku za prelazak na specifičnu stranicu RD-a
+    if (rdName === "RD Prvo") {
+      navigate("/rd-prvo");
+    } else {
+      console.log(`Odabrano: ${rdName}`);
+      // Logika za druga reciklažna dvorišta
+    }
   };
 
   return (
