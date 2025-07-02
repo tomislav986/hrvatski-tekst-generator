@@ -45,6 +45,7 @@ const RDPrvo = () => {
   const [wasteSearchTerm, setWasteSearchTerm] = useState("");
   const [showWasteSuggestions, setShowWasteSuggestions] = useState(false);
   const [selectedWasteTypes, setSelectedWasteTypes] = useState<SelectedWasteType[]>([]);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const billingLocations = [
     "Obračunsko mjesto 1",
@@ -123,6 +124,24 @@ const RDPrvo = () => {
 
   const removeWasteType = (wasteId: string) => {
     setSelectedWasteTypes(prev => prev.filter(waste => waste.id !== wasteId));
+  };
+
+  const hasQuantities = useMemo(() => {
+    return selectedWasteTypes.some(waste => waste.quantity > 0);
+  }, [selectedWasteTypes]);
+
+  const handleSave = () => {
+    setShowConfirmationModal(true);
+  };
+
+  const handleConfirmSave = () => {
+    console.log("Saving data:", {
+      user: selectedUser,
+      billingLocation: selectedBillingLocation,
+      wasteTypes: selectedWasteTypes
+    });
+    setShowConfirmationModal(false);
+    // Add actual save logic here
   };
 
   return (
@@ -298,7 +317,63 @@ const RDPrvo = () => {
             )}
           </div>
         )}
+
+        {/* Save Button */}
+        {selectedWasteTypes.length > 0 && (
+          <div className="mt-6 flex justify-center">
+            <Button
+              onClick={handleSave}
+              disabled={!hasQuantities}
+              className={`px-8 py-3 text-lg ${!hasQuantities ? 'bg-muted text-muted-foreground cursor-not-allowed' : ''}`}
+              size="lg"
+            >
+              Spremi
+            </Button>
+          </div>
+        )}
       </div>
+
+      {/* Confirmation Modal */}
+      <Dialog open={showConfirmationModal} onOpenChange={setShowConfirmationModal}>
+        <DialogContent className="bg-background border max-w-md">
+          <DialogHeader>
+            <DialogTitle>Potvrda spremanja</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <h4 className="font-semibold mb-2">Pregled podataka:</h4>
+              <div className="space-y-2 text-sm">
+                <div><strong>Korisnik:</strong> {selectedUser?.name}</div>
+                <div><strong>Obračunsko mjesto:</strong> {selectedBillingLocation}</div>
+                <div><strong>KBO i kilaže:</strong></div>
+                <div className="ml-4 space-y-1">
+                  {selectedWasteTypes.filter(waste => waste.quantity > 0).map((waste) => (
+                    <div key={waste.id}>
+                      {waste.keyNumber} - {waste.quantity} kg
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="pt-4 border-t">
+              <p className="text-sm font-medium mb-4">
+                Jeste li sigurni da želite pohraniti ove količine otpada?
+              </p>
+              <div className="flex gap-3 justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowConfirmationModal(false)}
+                >
+                  Odustani
+                </Button>
+                <Button onClick={handleConfirmSave}>
+                  Spremi
+                </Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Billing Location Modal */}
       <Dialog open={showBillingModal} onOpenChange={setShowBillingModal}>
