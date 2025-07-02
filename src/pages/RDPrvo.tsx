@@ -18,6 +18,10 @@ interface WasteType {
   name: string;
 }
 
+interface SelectedWasteType extends WasteType {
+  quantity: number;
+}
+
 const sampleUsers: User[] = [
   { id: "1", name: "Tomislav Samarin", barcode: "60006826102" },
   { id: "2", name: "Ivan Vuljak", barcode: "12345678901" },
@@ -40,7 +44,7 @@ const RDPrvo = () => {
   const [selectedBillingLocation, setSelectedBillingLocation] = useState<string | null>(null);
   const [wasteSearchTerm, setWasteSearchTerm] = useState("");
   const [showWasteSuggestions, setShowWasteSuggestions] = useState(false);
-  const [selectedWaste, setSelectedWaste] = useState<WasteType | null>(null);
+  const [selectedWasteTypes, setSelectedWasteTypes] = useState<SelectedWasteType[]>([]);
 
   const billingLocations = [
     "Obračunsko mjesto 1",
@@ -97,13 +101,28 @@ const RDPrvo = () => {
   const handleWasteSearchChange = (value: string) => {
     setWasteSearchTerm(value);
     setShowWasteSuggestions(value.length > 0);
-    setSelectedWaste(null);
   };
 
   const handleWasteSelect = (waste: WasteType) => {
-    setSelectedWaste(waste);
-    setWasteSearchTerm(`${waste.keyNumber} ${waste.name}`);
+    // Check if waste type is already selected
+    const isAlreadySelected = selectedWasteTypes.some(selected => selected.id === waste.id);
+    if (!isAlreadySelected) {
+      setSelectedWasteTypes(prev => [...prev, { ...waste, quantity: 0 }]);
+    }
+    setWasteSearchTerm("");
     setShowWasteSuggestions(false);
+  };
+
+  const handleQuantityChange = (wasteId: string, quantity: number) => {
+    setSelectedWasteTypes(prev => 
+      prev.map(waste => 
+        waste.id === wasteId ? { ...waste, quantity } : waste
+      )
+    );
+  };
+
+  const removeWasteType = (wasteId: string) => {
+    setSelectedWasteTypes(prev => prev.filter(waste => waste.id !== wasteId));
   };
 
   return (
@@ -237,17 +256,45 @@ const RDPrvo = () => {
               )}
             </div>
 
-            {/* Selected Waste Display */}
-            {selectedWaste && (
-              <Card className="mt-4">
-                <CardContent className="p-4">
-                  <h3 className="font-semibold mb-2">Odabrani otpad:</h3>
-                  <div className="text-lg font-medium">{selectedWaste.keyNumber} {selectedWaste.name}</div>
-                  <div className="text-sm text-muted-foreground">
-                    Ključni broj: {selectedWaste.keyNumber}
-                  </div>
-                </CardContent>
-              </Card>
+            {/* Selected Waste Types Display */}
+            {selectedWasteTypes.length > 0 && (
+              <div className="mt-4 space-y-3">
+                <h3 className="font-semibold">Odabrani otpadni materijali:</h3>
+                {selectedWasteTypes.map((waste) => (
+                  <Card key={waste.id}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <div className="text-lg font-medium">{waste.keyNumber} {waste.name}</div>
+                          <div className="text-sm text-muted-foreground">
+                            Ključni broj: {waste.keyNumber}
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeWasteType(waste.id)}
+                          className="text-destructive hover:text-destructive"
+                        >
+                          Ukloni
+                        </Button>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <label className="text-sm font-medium">Količina (kg):</label>
+                        <Input
+                          type="number"
+                          placeholder="0"
+                          value={waste.quantity || ""}
+                          onChange={(e) => handleQuantityChange(waste.id, parseFloat(e.target.value) || 0)}
+                          className="w-32"
+                          min="0"
+                          step="0.1"
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             )}
           </div>
         )}
