@@ -238,21 +238,12 @@ const RDPrvo = () => {
         {selectedBillingLocation && (
           <div className="mt-4">
             <div className="relative">
-              <div className="relative">
-                <Input
-                  placeholder="Ključni broj otpada"
-                  value={wasteSearchTerm}
-                  onChange={(e) => handleWasteSearchChange(e.target.value)}
-                  className="pr-12 h-12 text-base"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-muted-foreground"
-                >
-                  <ScanLine className="h-5 w-5" />
-                </Button>
-              </div>
+              <Input
+                placeholder="Ključni broj otpada"
+                value={wasteSearchTerm}
+                onChange={(e) => handleWasteSearchChange(e.target.value)}
+                className="h-12 text-base"
+              />
 
               {/* Waste Suggestions */}
               {showWasteSuggestions && filteredWasteTypes.length > 0 && (
