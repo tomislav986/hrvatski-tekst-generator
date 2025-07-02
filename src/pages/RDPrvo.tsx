@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ArrowLeft, ScanLine } from "lucide-react";
 
 interface User {
@@ -23,6 +24,13 @@ const RDPrvo = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showBillingModal, setShowBillingModal] = useState(false);
+
+  const billingLocations = [
+    "Obračunsko mjesto 1",
+    "Obračunsko mjesto 2", 
+    "Obračunsko mjesto 3"
+  ];
 
   const filteredUsers = useMemo(() => {
     if (!searchTerm) return [];
@@ -47,6 +55,18 @@ const RDPrvo = () => {
 
   const handleLogout = () => {
     navigate("/login");
+  };
+
+  const handleUserCardClick = () => {
+    if (selectedUser) {
+      setShowBillingModal(true);
+    }
+  };
+
+  const handleBillingLocationSelect = (location: string) => {
+    console.log(`Selected billing location: ${location} for user: ${selectedUser?.name}`);
+    setShowBillingModal(false);
+    // Here you can add logic to proceed with the selected billing location
   };
 
   return (
@@ -115,17 +135,41 @@ const RDPrvo = () => {
 
         {/* Selected User Display */}
         {selectedUser && (
-          <Card className="mt-4">
+          <Card className="mt-4 cursor-pointer hover:bg-accent/50 transition-colors" onClick={handleUserCardClick}>
             <CardContent className="p-4">
               <h3 className="font-semibold mb-2">Odabrani korisnik:</h3>
               <div className="text-lg font-medium">{selectedUser.name}</div>
               <div className="text-sm text-muted-foreground">
                 Barkod: {selectedUser.barcode}
               </div>
+              <div className="text-xs text-muted-foreground mt-2">
+                Kliknite za odabir obračunskog mjesta
+              </div>
             </CardContent>
           </Card>
         )}
       </div>
+
+      {/* Billing Location Modal */}
+      <Dialog open={showBillingModal} onOpenChange={setShowBillingModal}>
+        <DialogContent className="bg-background border">
+          <DialogHeader>
+            <DialogTitle>Odaberite obračunsko mjesto</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2 mt-4">
+            {billingLocations.map((location, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                className="w-full justify-start h-12"
+                onClick={() => handleBillingLocationSelect(location)}
+              >
+                {location}
+              </Button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
