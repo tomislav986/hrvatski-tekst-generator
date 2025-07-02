@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { ClipboardList, Menu } from "lucide-react";
+import { ClipboardList, Recycle, Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -58,6 +58,15 @@ const MainSidebar = () => {
                   <span>Radni nalozi</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  isActive={isActive("/recycling-yard")}
+                  onClick={() => handleNavigation("/recycling-yard")}
+                >
+                  <Recycle />
+                  <span>Reciklažno dvorište</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </div>
         </SheetContent>
@@ -77,6 +86,15 @@ const MainSidebar = () => {
             >
               <ClipboardList />
               <span>Radni nalozi</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton 
+              isActive={isActive("/recycling-yard")}
+              onClick={() => handleNavigation("/recycling-yard")}
+            >
+              <Recycle />
+              <span>Reciklažno dvorište</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
